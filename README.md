@@ -1,2 +1,3 @@
-# SPECIAL-PLC-WEB
-In my repository I will add some important information about the SPECIAL blocks from LOGO SOFT COMFORT (v8.3)
+# Carlos-Adona--Talamantes-Gonz-lez_Miguel-Muro-Rodr-guez-PROYECTO-PLC
+En esta página web se busca integrar el conocimiento adquirido sobre los PLC mediante el software LOGO!Soft Comfort (v8.3)
+Así como recopilar ejercicios prácticos para mejorar la calidad educativa.

@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ejemplos Prácticos - Proyecto PLC</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .indice-ejemplos {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .indice-ejemplos h2 {
+      text-align: center;
+      color: #032e5b;
+      margin-bottom: 1rem;
+    }
+    .categoria { margin-top: 1.5rem; }
+    .categoria h3 {
+      background: #0059b3;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      text-align: center;
+    }
+    .lista-bloques {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+      list-style: none;
+      padding: 0;
+    }
+    .lista-bloques li {
+      background: #0059b3;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .lista-bloques li:hover { background: #003d80; transform: scale(1.05); }
+    .lista-bloques a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .bloque-ejemplo {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 0 15px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .bloque-ejemplo h3 { color: #032e5b; margin-bottom: 1rem; }
+    .bloque-ejemplo img {
+      width: 100%; max-width: 400px; height: auto;
+      border-radius: 8px; margin-bottom: 1rem;
+    }
+    .descarga-ejemplo {
+      display: inline-block;
+      background: #0055aa;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .descarga-ejemplo:hover { background: #003d80; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ejemplos Prácticos de Bloques Especiales</h1>
+    <a href="index.html" class="btn-regresar">← Regresar al inicio</a>
+  </header>
+
+  <section class="indice-ejemplos">
+    <h2>Índice de Bloques</h2>
+
+    <div class="categoria">
+      <h3>Temporizadores</h3>
+      <ul class="lista-bloques">
+        <li><a href="#bloque1">Bloque 1 - Retardo a la conexión</a></li>
+        <li><a href="#bloque2">Bloque 2 - Retardo a la desconexión</a></li>
+        <li><a href="#bloque3">Bloque 3 - Retardo conexión/desconexión</a></li>
+        <li><a href="#bloque4">Bloque 4 - Retardo con memoria</a></li>
+        <li><a href="#bloque5">Bloque 5 - Relé de barrido</a></li>
+        <li><a href="#bloque6">Bloque 6 - Relé por flancos</a></li>
+        <li><a href="#bloque7">Bloque 7 - Reloj simétrico</a></li>
+        <li><a href="#bloque8">Bloque 8 - Generador de impulsos asíncrono</a></li>
+        <li><a href="#bloque9">Bloque 9 - Generador aleatorio</a></li>
+        <li><a href="#bloque10">Bloque 10 - Interruptor de alumbrado</a></li>
+        <li><a href="#bloque11">Bloque 11 - Interruptor bifuncional</a></li>
+        <li><a href="#bloque12">Bloque 12 - Temporizador semanal</a></li>
+        <li><a href="#bloque13">Bloque 13 - Temporizador anual</a></li>
+        <li><a href="#bloque14">Bloque 14 - Cronómetro / Reloj astronómico</a></li>
+      </ul>
+    </div>
+
+    <div class="categoria">
+      <h3>Contadores</h3>
+      <ul class="lista-bloques">
+        <li><a href="#bloque15">Bloque 15 - Contador ascendente</a></li>
+        <li><a href="#bloque16">Bloque 16 - Contador descendente</a></li>
+        <li><a href="#bloque17">Bloque 17 - Contador adelante/atrás</a></li>
+        <li><a href="#bloque18">Bloque 18 - Contador de horas</a></li>
+      </ul>
+    </div>
+
+    <div class="categoria">
+      <h3>Bloques Analógicos</h3>
+      <ul class="lista-bloques">
+        <li><a href="#bloque19">Bloque 19 - Selector de umbral</a></li>
+        <li><a href="#bloque20">Bloque 20 - Instrucción aritmética</a></li>
+        <li><a href="#bloque21">Bloque 21 - Comparador analógico</a></li>
+        <li><a href="#bloque22">Bloque 22 - Conmutador analógico</a></li>
+        <li><a href="#bloque23">Bloque 23 - Amplificador analógico</a></li>
+        <li><a href="#bloque24">Bloque 24 - Vigilancia de valor analógico</a></li>
+        <li><a href="#bloque25">Bloque 25 - Conmutador diferencial</a></li>
+        <li><a href="#bloque26">Bloque 26 - MUX analógico</a></li>
+        <li><a href="#bloque27">Bloque 27 - Rampa analógica</a></li>
+        <li><a href="#bloque28">Bloque 28 - Regulador PI</a></li>
+        <li><a href="#bloque29">Bloque 29 - PWM</a></li>
+        <li><a href="#bloque30">Bloque 30 - Filtro analógico</a></li>
+      </ul>
+    </div>
+
+    <div class="categoria">
+      <h3>Otros Bloques</h3>
+      <ul class="lista-bloques">
+        <li><a href="#bloque31">Bloque 31 - Máx/Mín</a></li>
+        <li><a href="#bloque32">Bloque 32 - Valor medio</a></li>
+        <li><a href="#bloque33">Bloque 33 - Relé autoenclavador</a></li>
+        <li><a href="#bloque34">Bloque 34 - Relé de impulsos</a></li>
+        <li><a href="#bloque35">Bloque 35 - Texto de aviso</a></li>
+        <li><a href="#bloque36">Bloque 36 - Interruptor de software</a></li>
+        <li><a href="#bloque37">Bloque 37 - Registro de desplazamiento</a></li>
+        <li><a href="#bloque38">Bloque 38 - Detección de error</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <main>
+    <!-- 38 BLOQUES CON SU ESTRUCTURA -->
+    <!-- Temporizadores -->
+    <section id="bloque1" class="bloque-ejemplo"><h3>Bloque 1 - Retardo a la conexión</h3><img src="bloques/bloque1.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque1.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque2" class="bloque-ejemplo"><h3>Bloque 2 - Retardo a la desconexión</h3><img src="bloques/bloque2.png"><p><em>Este bloque funciona de tal manera que la entrada Trg define si el bloque "Retardo a la conexión" se activa o no, siendo que si I1 = 1, este se activa, pero si I = 0,
+este se desactivara tras pasar un tiempo dado en los parametros del bloque, puede ser de 5 segundos, asi como 5 minutos, o incluso hasta horas.
+En dado caso que este se encuentre activado, pero I1 = 0, al pulsar "Reset" lo que haremos es que este se apague, cambiando su estado a 0 sin importar si
+el tiempo colocado haya pasado o no, dejandolo desactivado.
+Si llegase a ocurrir que I1 =1 e I2= 1, este se mantendra desactivado hasta que I2 = 0 (La entrada al reset se desactive).
+Cuando I1 = 1 y el temporizador ya estaba corriendo, este se reiniciara, volviendo a empezar desde 0 cuando I1 vuelva a 0.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque2.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque3" class="bloque-ejemplo"><h3>Bloque 3 - Retardo conexión/desconexión</h3><img src="bloques/bloque3.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque3.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque4" class="bloque-ejemplo"><h3>Bloque 4 - Retardo con memoria</h3><img src="bloques/bloque4.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque4.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque5" class="bloque-ejemplo"><h3>Bloque 5 - Relé de barrido</h3><img src="bloques/bloque5.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque5.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque6" class="bloque-ejemplo"><h3>Bloque 6 - Relé por flancos</h3><img src="bloques/bloque6.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque6.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque7" class="bloque-ejemplo"><h3>Bloque 7 - Reloj simétrico</h3><img src="bloques/bloque7.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque7.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque8" class="bloque-ejemplo"><h3>Bloque 8 - Generador de impulsos asíncrono</h3><img src="bloques/bloque8.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque8.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque9" class="bloque-ejemplo"><h3>Bloque 9 - Generador aleatorio</h3><img src="bloques/bloque9.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque9.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque10" class="bloque-ejemplo"><h3>Bloque 10 - Interruptor de alumbrado</h3><img src="bloques/bloque10.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque10.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque11" class="bloque-ejemplo"><h3>Bloque 11 - Interruptor bifuncional</h3><img src="bloques/bloque11.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque11.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque12" class="bloque-ejemplo"><h3>Bloque 12 - Temporizador semanal</h3><img src="bloques/bloque12.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque12.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque13" class="bloque-ejemplo"><h3>Bloque 13 - Temporizador anual</h3><img src="bloques/bloque13.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque13.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque14" class="bloque-ejemplo"><h3>Bloque 14 - Cronómetro / Reloj astronómico</h3><img src="bloques/bloque14.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque14.lsc" download>Descargar ejercicio</a></section>
+    
+    <!-- Contadores -->
+    <section id="bloque15" class="bloque-ejemplo"><h3>Bloque 15 - Contador ascendente</h3><img src="bloques/bloque15.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque15.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque16" class="bloque-ejemplo"><h3>Bloque 16 - Contador descendente</h3><img src="bloques/bloque16.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque16.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque17" class="bloque-ejemplo"><h3>Bloque 17 - Contador adelante/atrás</h3><img src="bloques/bloque17.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque17.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque18" class="bloque-ejemplo"><h3>Bloque 18 - Contador de horas</h3><img src="bloques/bloque18.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque18.lsc" download>Descargar ejercicio</a></section>
+
+    <!-- Analógicos -->
+    <section id="bloque19" class="bloque-ejemplo"><h3>Bloque 19 - Selector de umbral</h3><img src="bloques/bloque19.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque19.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque20" class="bloque-ejemplo"><h3>Bloque 20 - Instrucción aritmética</h3><img src="bloques/bloque20.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque20.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque21" class="bloque-ejemplo"><h3>Bloque 21 - Comparador analógico</h3><img src="bloques/bloque21.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque21.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque22" class="bloque-ejemplo"><h3>Bloque 22 - Conmutador analógico</h3><img src="bloques/bloque22.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque22.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque23" class="bloque-ejemplo"><h3>Bloque 23 - Amplificador analógico</h3><img src="bloques/bloque23.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque23.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque24" class="bloque-ejemplo"><h3>Bloque 24 - Vigilancia de valor analógico</h3><img src="bloques/bloque24.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque24.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque25" class="bloque-ejemplo"><h3>Bloque 25 - Conmutador diferencial</h3><img src="bloques/bloque25.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque25.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque26" class="bloque-ejemplo"><h3>Bloque 26 - MUX analógico</h3><img src="bloques/bloque26.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque26.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque27" class="bloque-ejemplo"><h3>Bloque 27 - Rampa analógica</h3><img src="bloques/bloque27.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque27.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque28" class="bloque-ejemplo"><h3>Bloque 28 - Regulador PI</h3><img src="bloques/bloque28.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque28.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque29" class="bloque-ejemplo"><h3>Bloque 29 - PWM</h3><img src="bloques/bloque29.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque29.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque30" class="bloque-ejemplo"><h3>Bloque 30 - Filtro analógico</h3><img src="bloques/bloque30.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque30.lsc" download>Descargar ejercicio</a></section>
+
+    <!-- Otros -->
+    <section id="bloque31" class="bloque-ejemplo"><h3>Bloque 31 - Máx/Mín</h3><img src="bloques/bloque31.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque31.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque32" class="bloque-ejemplo"><h3>Bloque 32 - Valor medio</h3><img src="bloques/bloque32.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque32.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque33" class="bloque-ejemplo"><h3>Bloque 33 - Relé autoenclavador</h3><img src="bloques/bloque33.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque33.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque34" class="bloque-ejemplo"><h3>Bloque 34 - Relé de impulsos</h3><img src="bloques/bloque34.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque34.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque35" class="bloque-ejemplo"><h3>Bloque 35 - Texto de aviso</h3><img src="bloques/bloque35.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque35.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque36" class="bloque-ejemplo"><h3>Bloque 36 - Interruptor de software</h3><img src="bloques/bloque36.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque36.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque37" class="bloque-ejemplo"><h3>Bloque 37 - Registro de desplazamiento</h3><img src="bloques/bloque37.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque37.lsc" download>Descargar ejercicio</a></section>
+    <section id="bloque38" class="bloque-ejemplo"><h3>Bloque 38 - Detección de error</h3><img src="bloques/bloque38.png"><p><em>Espacio para explicación.</em></p><a class="descarga-ejemplo" href="ejemplos/Bloque38.lsc" download>Descargar ejercicio</a></section>
+  </main>
+
+  <footer>
+    <p>© 2025 | Proyecto PLC - ICC 2025 | Elaborado con fines educativos por Carlos Adonaí Talamantes González y Miguel Muro Rodríguez</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Proyecto PLC – ICC 2025</title>
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --accent1:#ff8c00;
+      --accent2:#6610f2;
+      --text:#222;
+      --muted:#6c757d;
+      --shadow: 0 6px 24px rgba(16,24,40,0.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    /* HEADER */
+    header{
+      position:relative;
+      height:260px;
+      overflow:hidden;
+      background:#0b1220;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    /* Aumentado z-index para que el texto quede siempre encima del logo */
+    header .cabecera-texto{
+      position:relative;
+      z-index:6;
+      text-align:center;
+      color:#fff;
+      text-shadow:0 2px 8px rgba(0,0,0,0.6);
+      pointer-events:none;
+    }
+    header .cabecera-texto h1{ margin:0; font-size:2rem; letter-spacing:0.6px }
+    header .cabecera-texto p{ margin:6px 0 0; opacity:0.95; font-size:0.95rem }
+
+    /* Reducido z-index del logo para que no tape las reglas/textos */
+    #uan {
+      position:absolute;
+      width:140px;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      z-index:4;
+      transition: left 0.9s cubic-bezier(.2,.9,.2,1), transform 0.9s;
+      pointer-events:none;
+    }
+    header.loaded #uan { left:10%; transform:translateY(-50%); }
+
+    #mexico {
+      position:absolute;
+      top:0; right:-120%;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      z-index:2;
+      filter:brightness(0.55);
+      transition: right 1s cubic-bezier(.22,.9,.32,1) 0.6s;
+    }
+    header.loaded #mexico { right:0; }
+
+    main { padding:22px 18px 60px; max-width:1100px; margin:0 auto; }
+
+    .legendario-container{
+      margin:26px auto;
+      position:relative;
+      text-align:center;
+      width:100%;
+      max-width:920px;
+      overflow:hidden; /* evita que la pseudo-capa salga del bloque */
+      border-radius:16px;
+    }
+
+    /* Pseudo-capa difusa ahora contenida y con degradado arcoíris animado */
+    .legendario-container::before{
+      content:"";
+      position:absolute;
+      inset:-20% -6%;
+      background: conic-gradient(from 0deg, #ff004d, #ff7a00, #ffd300, #14d14b, #00b7ff, #6b24ff, #ff004d);
+      filter: blur(28px);
+      animation: rotateSweep 8s linear infinite;
+      z-index:0;
+      pointer-events:none;
+      opacity:0.95;
+    }
+    @keyframes rotateSweep{ from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes rainbowShift { 0%{background-position:0% 50%} 100%{background-position:100% 50%} }
+
+    .btn-legendario{
+      position:relative;
+      display:inline-block;
+      padding:18px 34px;
+      border-radius:14px;
+      background: linear-gradient(90deg,var(--accent2), #9b5cff);
+      color:white;
+      font-weight:700;
+      font-size:1.12rem;
+      letter-spacing:1px;
+      border: 2px solid rgba(255,255,255,0.08);
+      box-shadow: 0 8px 30px rgba(102,16,242,0.22);
+      cursor:pointer;
+      transition: transform .28s ease, box-shadow .28s ease;
+      z-index:2; /* por encima del ::before del contenedor */
+      overflow:hidden; /* para contener su propio pseudo-elemento */
+    }
+    .btn-legendario:hover{ transform:translateY(-6px); box-shadow:0 18px 60px rgba(102,16,242,0.2) }
+
+    /* Capa difusa del botón (más suave) que también anima colores, pero queda limitada al botón */
+    .btn-legendario::after{
+      content:"";
+      position:absolute;
+      inset:-18%;
+      background: conic-gradient(from 0deg, #ff004d, #ff7a00, #ffd300, #14d14b, #00b7ff, #6b24ff, #ff004d);
+      filter: blur(18px);
+      opacity:0.14;
+      pointer-events:none;
+      animation: rotateSweep 6s linear infinite;
+      border-radius:18px;
+      z-index:0;
+    }
+
+    /* Texto del botón con gradiente animado (arcoíris que recorre las letras) */
+    .btn-legendario .rainbowText{
+      position:relative;
+      z-index:3;
+      display:inline-block;
+      background: linear-gradient(90deg, #ff004d, #ff7a00, #ffd300, #14d14b, #00b7ff, #6b24ff, #ff004d);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: rainbowShift 3.4s linear infinite;
+    }
+
+    .legendario-container::before,
+    .btn-legendario::after { will-change: transform, filter; }
+
+    .indice-ventana{
+      margin:18px auto 6px;
+      max-width:920px;
+      background:var(--card);
+      border-radius:12px;
+      padding:12px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .indice-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .indice-titulo{ font-weight:700; font-size:1.05rem; color:var(--muted) }
+    .indice-grid{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap:10px;
+      max-height:420px;
+      overflow:auto;
+      padding-right:6px;
+    }
+    .bloque {
+      background: linear-gradient(180deg,#ffffff,#fbfbfd);
+      border-radius:8px;
+      padding:10px 12px;
+      border:1px solid rgba(16,24,40,0.04);
+      box-shadow: 0 6px 18px rgba(13,20,30,0.04);
+      transition: transform .16s ease, box-shadow .16s ease;
+    }
+    .bloque a{
+      color:var(--text);
+      font-weight:600;
+      text-decoration:none;
+      display:block;
+      font-size:0.96rem;
+    }
+    .bloque:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(16,24,40,0.06) }
+
+    .seccion{
+      background:var(--card);
+      border-radius:12px;
+      padding:22px;
+      margin:18px 0;
+      box-shadow: var(--shadow);
+    }
+
+    /* Texto específico: header y footer en blanco; contenido principal en colores oscuros */
+    header, footer { color: #ffffff; }
+    footer{
+      margin-top:36px;
+      background:#0b1220;
+      color:#ffffff;
+      padding:22px 18px;
+      text-align:center;
+      border-top:6px solid rgba(255,140,0,0.08);
+    }
+    footer .redes a{
+      display:inline-block;
+      margin:6px 12px;
+      color:#ffffff;
+      text-decoration:none;
+      font-weight:600;
+    }
+
+    /* Contenido principal: títulos y párrafos en color oscuro para buena legibilidad */
+    main h2 { margin-top:0; color:var(--text); font-size:1.25rem; }
+    main p { color:var(--text); line-height:1.6; margin:0.6rem 0; }
+    main .muted { color:var(--muted); }
+
+    /* Enlaces dentro del contenido principal */
+    main .videos a{ display:block; margin:10px 0; color:var(--text); text-decoration:underline; font-weight:600 }
+
+    .downloads{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:10px }
+    .downloads a{ display:inline-block; padding:12px 16px; background:#0b1220; color:#fff; border-radius:10px; text-decoration:none; font-weight:700; }
+
+    @media (max-width:720px){
+      header{ height:200px }
+      #uan{ width:120px }
+      .btn-legendario{ width:100%; padding:14px 18px }
+      .indice-grid{ grid-template-columns: repeat(1,1fr) }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header id="mainHeader">
+    <img id="mexico" src="mexico.png" alt="Bandera de México" aria-hidden="true">
+    <img id="uan" src="uan.png" alt="Logo UAN">
+    <div class="cabecera-texto">
+      <h1>Proyecto PLC – ICC 2025</h1>
+      <p>Autores: Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez — Ingeniería en Computación | Universidad Autónoma de Nayarit</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="legendario-container">
+      <!-- envolví el texto en un span.rainbowText para que las letras cambien de color -->
+      <button id="toggleBtn" class="btn-legendario" aria-expanded="false" aria-controls="indiceVentana">
+        <span class="rainbowText">PROYECTO 38 BLOQUES</span>
+      </button>
+    </div>
+
+    <div id="indiceVentana" class="indice-ventana" style="display:none">
+      <div class="indice-header">
+        <div class="indice-titulo">Índice de Bloques Especiales (1–38)</div>
+        <div style="color:var(--muted); font-size:0.95rem">Selecciona un bloque para ver su página</div>
+      </div>
+
+      <div id="indiceGrid" class="indice-grid"></div>
+    </div>
+
+    <!-- CONTENIDO PRINCIPAL (COLORES OSCUROS PARA LEGIBILIDAD) -->
+    <section class="seccion" aria-labelledby="intro-title">
+      <h2 id="intro-title">Introducción</h2>
+      <p>Un PLC (Controlador Lógico Programable) es un dispositivo electrónico diseñado para automatizar procesos industriales mediante la supervisión de señales de entrada y el control de salidas. LOGO!Soft Comfort, desarrollado por Siemens, es una herramienta de programación que permite simular, crear y verificar proyectos de control de manera visual e intuitiva. En esta página se explican conceptos técnicos y fundamentos esenciales para comprender el funcionamiento, cableado y seguridad de los sistemas PLC.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="objetivo-title">
+      <h2 id="objetivo-title">Objetivo del proyecto</h2>
+      <p>El propósito de este proyecto es brindar una guía didáctica y accesible sobre el uso del software LOGO!Soft Comfort y el funcionamiento de los bloques especiales del PLC Siemens LOGO!, promoviendo el aprendizaje práctico de los estudiantes de Ingeniería y Automatización. Se busca desarrollar la comprensión de los conceptos técnicos que intervienen en el diseño, programación, cableado y seguridad de los sistemas de control industrial.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="remanencia-title">
+      <h2 id="remanencia-title">Remanencia</h2>
+      <p>La remanencia es la capacidad del PLC para conservar ciertos valores o estados en memoria aun después de un corte de energía. Gracias a esta característica, el controlador puede continuar su operación con las mismas condiciones previas al restablecerse la alimentación eléctrica. Es fundamental en aplicaciones donde se requiere mantener contadores, temporizadores o banderas de control sin reinicio.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="proteccion-title">
+      <h2 id="proteccion-title">Protección activa</h2>
+      <p>La protección activa incluye los dispositivos y medidas que protegen al sistema y al operario ante fallas eléctricas, sobrecorrientes o cortocircuitos. Entre ellos destacan los fusibles, disyuntores, relés térmicos, contactores y la conexión a tierra. Su propósito es interrumpir la energía ante un fallo, evitando daños en el PLC o en los actuadores conectados.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="conexion-title">
+      <h2 id="conexion-title">Cómo se conecta un PLC</h2>
+      <p>El cableado de un PLC se realiza interconectando correctamente sus terminales de entrada (I) y salida (Q), además de su fuente de alimentación. Las entradas se asocian con sensores o pulsadores, mientras que las salidas controlan dispositivos como motores, lámparas o válvulas. Se recomienda seguir los diagramas eléctricos del fabricante, mantener el orden en los conductores y utilizar protecciones adecuadas.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="video-title">
+      <h2 id="video-title">Video educativo</h2>
+      <p>El siguiente recurso audiovisual se comparte con fines meramente educativos y explicativos, y no pertenece a los autores de este proyecto. Su propósito es facilitar la comprensión del cableado de un PLC:</p>
+      <div class="videos">
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer">Ver en YouTube: Cómo cablear un PLC</a>
+      </div>
+    </section>
+
+    <section class="seccion" aria-labelledby="seguridad-title">
+      <h2 id="seguridad-title">Protocolos básicos de seguridad en PLC</h2>
+      <p>En el entorno industrial, la seguridad es prioritaria. Los protocolos básicos incluyen: desconectar la energía antes de manipular el sistema, identificar correctamente la polaridad de las conexiones, mantener el cableado ordenado, emplear protecciones contra sobrecorriente, realizar simulaciones previas antes de la ejecución física y utilizar equipo de protección personal. Seguir estos lineamientos evita daños eléctricos y garantiza la integridad del operador.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="siglas-title">
+      <h2 id="siglas-title">Significado de P, N, A, NA, NC, I y Q</h2>
+      <p>En los esquemas eléctricos de un PLC se utilizan siglas que indican el tipo de componente o señal. P representa el polo positivo o fase, mientras que N indica el neutro o negativo. La letra A puede asociarse a corriente alterna. Los pulsadores y contactos tienen designaciones como NA (Normalmente Abierto) o NC (Normalmente Cerrado). Un pulsador P-NA permite el paso de corriente únicamente al presionarlo, mientras que un P-NC interrumpe la corriente al ser presionado. Asimismo, I-NA indica una entrada normalmente abierta. Conocer estas abreviaciones es vital para interpretar correctamente los esquemas lógicos del PLC.</p>
+      <p>Por otro lado, las letras I y Q designan las entradas y salidas del controlador. Las entradas (I) reciben señales de sensores o pulsadores, y las salidas (Q) controlan actuadores, motores o luces. Esta simbología permite identificar con precisión el flujo de señal en el sistema.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="valores-title">
+      <h2 id="valores-title">Valores lógicos 1 y 0</h2>
+      <p>Los PLC trabajan bajo el principio de la lógica binaria. Un valor 1 representa un estado activo, encendido o verdadero (energizado), mientras que un valor 0 representa un estado inactivo, apagado o falso. Estos valores son esenciales para interpretar las condiciones del sistema y la ejecución de las operaciones lógicas internas.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="letra-x-title">
+      <h2 id="letra-x-title">Letra “X” en las salidas Q</h2>
+      <p>En los esquemas del PLC, las salidas suelen identificarse como Qx.y, donde Q representa el módulo de salida, x el número del módulo, y y el número del canal. Por ejemplo, Q1.0 corresponde a la primera salida del primer módulo. Esta nomenclatura permite diferenciar múltiples módulos y canales dentro del sistema de expansión del PLC.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="motores-title">
+      <h2 id="motores-title">Encendido de motores en Q</h2>
+      <p>Cuando una salida Q se activa, el PLC no alimenta directamente al motor, sino que envía una señal de control a un contactor o relé intermedio, encargado de cerrar el circuito de potencia. De esta forma, el PLC actúa como cerebro lógico del sistema, y los dispositivos externos realizan la conmutación eléctrica real. Esto evita sobrecargar el controlador y protege sus componentes internos.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="reles-title">
+      <h2 id="reles-title">Relés térmicos (OL)</h2>
+      <p>Los relés térmicos, conocidos como OL (Overload Relays), protegen los motores eléctricos ante sobrecargas prolongadas. Al detectar que la corriente supera el valor nominal del motor, interrumpen el circuito de control para evitar daños por sobrecalentamiento. Son dispositivos esenciales en la protección activa y en la seguridad del sistema de automatización.</p>
+    </section>
+
+    <!-- DESCARGAS / MANUAL -->
+    <section class="seccion" aria-labelledby="descargas-title">
+      <h2 id="descargas-title">Descargas</h2>
+      <p>En esta sección puedes descargar el manual completo del proyecto y otros recursos relacionados.</p>
+      <div class="downloads">
+        <a href="Manual.pdf" download target="_blank" rel="noopener noreferrer">Descargar manual (PDF)</a>
+        <span style="color:var(--muted); font-weight:600; margin-left:6px">Nota: los archivos .lsc se encuentran en la carpeta /programas</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER CORREGIDO -->
+  <footer>
+    <div style="max-width:1100px;margin:0 auto;">
+      <p>© 2025 | Proyecto PLC - ICC 2025 | Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez</p>
+      <p>Profesor: Ingeniero Ignacio Chávez Arcega | Materia: PLC</p>
+      <div class="redes">
+        <a href="https://www.facebook.com/share/14NZuwbbVwg/" target="_blank">Facebook de Carlos</a>
+        <a href="https://www.facebook.com/share/1EZ4xDHeC3/" target="_blank">Facebook de Miguel</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    window.addEventListener('load', () => {
+      document.getElementById('mainHeader').classList.add('loaded');
+    });
+
+    const nombres = [
+      "Retardo a la conexión","Retardo a la desconexión","Retardo conexión/desconexión",
+      "Retardo con memoria","Relé de barrido","Relé por flancos","Reloj simétrico",
+      "Generador de impulsos asíncrono","Generador aleatorio","Interruptor de alumbrado",
+      "Interruptor bifuncional","Temporizador semanal","Temporizador anual",
+      "Cronómetro / Reloj astronómico","Contador ascendente","Contador descendente",
+      "Contador adelante/atrás","Contador de horas","Selector de umbral",
+      "Instrucción aritmética","Comparador analógico","Conmutador analógico",
+      "Amplificador analógico","Vigilancia de valor analógico","Conmutador diferencial",
+      "MUX analógico","Rampa analógica","Regulador PI","PWM","Filtro analógico",
+      "Máx/Mín","Valor medio","Relé autoenclavador","Relé de impulsos","Texto de aviso",
+      "Interruptor de software","Registro de desplazamiento","Detección de error"
+    ];
+
+    const grid = document.getElementById('indiceGrid');
+    function generarGrid(){
+      grid.innerHTML = "";
+      for(let i=0;i<nombres.length;i++){
+        const num = i+1;
+        const div = document.createElement('div');
+        div.className = 'bloque';
+        const a = document.createElement('a');
+        a.href = `bloque${num}.html`;
+        a.textContent = `Bloque ${num} - ${nombres[i]}`;
+        div.appendChild(a);
+        grid.appendChild(div);
+      }
+    }
+    generarGrid();
+
+    const btn = document.getElementById('toggleBtn');
+    const ventana = document.getElementById('indiceVentana');
+
+    btn.addEventListener('click', () => {
+      const isVisible = ventana.style.display === 'block';
+      if(isVisible){
+        ventana.style.animation = 'fadeOut .28s ease forwards';
+        setTimeout(()=> ventana.style.display = 'none', 260);
+        btn.setAttribute('aria-expanded','false');
+      } else {
+        ventana.style.display = 'block';
+        ventana.style.animation = 'fadeInSlide .36s cubic-bezier(.2,.9,.2,1) forwards';
+        btn.setAttribute('aria-expanded','true');
+      }
+    });
+
+    (function(){
+      const s = document.createElement('style'); document.head.appendChild(s);
+      s.sheet.insertRule('@keyframes fadeInSlide { from { opacity:0; transform: translateY(-8px) scale(.995) } to { opacity:1; transform: translateY(0) scale(1) } }',0);
+      s.sheet.insertRule('@keyframes fadeOut { from { opacity:1; transform: translateY(0) } to { opacity:0; transform: translateY(-6px) } }',1);
+    })();
+  </script>
+
+</body>
+</html>
