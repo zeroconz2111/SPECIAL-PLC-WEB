@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Proyecto PLC – ICC 2025</title>
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --accent1:#0b76ff; /* azul */
+      --accent2:#1db954; /* verde */
+      --accent3:#ffd23f; /* amarillo */
+      --accent4:#ff4b4b; /* rojo */
+      --text:#111827;
+      --muted:#6c757d;
+      --shadow: 0 6px 24px rgba(16,24,40,0.08);
+      --card-radius:12px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.55;
+    }
+
+    /* HEADER */
+    header{
+      position:relative;
+      height:260px;
+      overflow:hidden;
+      background:#0b1220;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    header .cabecera-texto{
+      position:relative;
+      z-index:6;
+      text-align:center;
+      color:#fff;
+      text-shadow:0 2px 8px rgba(0,0,0,0.6);
+      pointer-events:none;
+      max-width:86%;
+    }
+    header .cabecera-texto h1{ margin:0; font-size:2rem; letter-spacing:0.6px }
+    header .cabecera-texto p{ margin:6px 0 0; opacity:0.95; font-size:0.95rem }
+
+    #uan {
+      position:absolute;
+      width:140px;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      z-index:4;
+      transition: left 0.9s cubic-bezier(.2,.9,.2,1), transform 0.9s;
+      pointer-events:none;
+      mix-blend-mode:screen;
+      opacity:0.95;
+    }
+    header.loaded #uan { left:10%; transform:translateY(-50%); }
+
+    #mexico {
+      position:absolute;
+      top:0; right:-120%;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      z-index:2;
+      filter:brightness(0.55);
+      transition: right 1s cubic-bezier(.22,.9,.32,1) 0.6s;
+    }
+    header.loaded #mexico { right:0; }
+
+    main { padding:28px 20px 70px; max-width:1180px; margin:0 auto; }
+
+    .legendario-container{
+      margin:18px auto;
+      position:relative;
+      text-align:center;
+      width:100%;
+      max-width:920px;
+      overflow:visible;
+      border-radius:16px;
+    }
+
+    /* Button base */
+    .btn-legendario{
+      position:relative;
+      display:inline-block;
+      padding:16px 34px;
+      border-radius:14px;
+      background: #050505; /* black background */
+      color:var(--card);
+      font-weight:800;
+      font-size:1.05rem;
+      letter-spacing:0.6px;
+      border: 2px solid rgba(255,255,255,0.06);
+      box-shadow: 0 12px 36px rgba(2,6,23,0.45), 0 4px 12px rgba(0,0,0,0.4);
+      cursor:pointer;
+      transition: transform .28s ease, box-shadow .28s ease;
+      z-index:10;
+      overflow:visible;
+    }
+    .btn-legendario:hover{ transform:translateY(-6px); box-shadow:0 26px 80px rgba(2,6,23,0.5) }
+
+    /* Four animated "snake" rings implemented as child spans.
+       Each .ring is a short arc (colored) on a donut shape; they rotate around the button with staggered timing. */
+    .btn-legendario .ring {
+      position:absolute;
+      left:50%;
+      top:50%;
+      transform-origin:50% 50%;
+      transform: translate(-50%,-50%) rotate(0deg);
+      border-radius:999px;
+      pointer-events:none;
+      z-index:2;
+      /* We'll mask them to show only a thin circular band */
+      -webkit-mask-image: radial-gradient(circle, transparent calc(100% - 10px), black calc(100% - 9px));
+      mask-image: radial-gradient(circle, transparent calc(100% - 10px), black calc(100% - 9px));
+      opacity:0.98;
+      mix-blend-mode: screen;
+    }
+
+    /* sizes and animations for each ring */
+    .btn-legendario .ring.r1{ width:220px; height:56px; background: conic-gradient(var(--accent1) 0deg 35deg, transparent 35deg 360deg); animation: spin1 7.6s linear infinite; }
+    .btn-legendario .ring.r2{ width:248px; height:70px; background: conic-gradient(var(--accent2) 0deg 32deg, transparent 32deg 360deg); animation: spin2 9s linear infinite; }
+    .btn-legendario .ring.r3{ width:280px; height:84px; background: conic-gradient(var(--accent3) 0deg 30deg, transparent 30deg 360deg); animation: spin3 11s linear infinite; }
+    .btn-legendario .ring.r4{ width:312px; height:98px; background: conic-gradient(var(--accent4) 0deg 28deg, transparent 28deg 360deg); animation: spin4 12.6s linear infinite; }
+
+    /* slight different directions and easing to get a following effect */
+    @keyframes spin1 { from{ transform: translate(-50%,-50%) rotate(0deg)} to{ transform: translate(-50%,-50%) rotate(360deg)} }
+    @keyframes spin2 { from{ transform: translate(-50%,-50%) rotate(30deg)} to{ transform: translate(-50%,-50%) rotate(390deg)} }
+    @keyframes spin3 { from{ transform: translate(-50%,-50%) rotate(60deg)} to{ transform: translate(-50%,-50%) rotate(420deg)} }
+    @keyframes spin4 { from{ transform: translate(-50%,-50%) rotate(90deg)} to{ transform: translate(-50%,-50%) rotate(450deg)} }
+
+    /* To make arcs appear smoother, add a subtle blur (not overpowering) */
+    .btn-legendario .ring { filter: blur(1px); }
+
+    /* center overlay to keep button content on top */
+    .btn-legendario .inner {
+      position:relative;
+      z-index:6;
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:8px;
+    }
+
+    /* text blend is now smooth/color-diffused */
+    .btn-legendario .btnText{
+      font-weight:900;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3), var(--accent4));
+      background-size: 400% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+      animation: textBlend 8s linear infinite;
+      z-index:7;
+      display:inline-block;
+    }
+    @keyframes textBlend {
+      0%   { background-position:   0% 50%; }
+      25%  { background-position:  25% 50%; }
+      50%  { background-position:  50% 50%; }
+      75%  { background-position:  75% 50%; }
+      100% { background-position:   0% 50%; }
+    }
+
+    .indice-ventana{
+      margin:18px auto 10px;
+      max-width:920px;
+      background:var(--card);
+      border-radius:var(--card-radius);
+      padding:14px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .indice-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .indice-titulo{ font-weight:800; font-size:1.02rem; color:var(--muted) }
+
+    /* Grid of blocks */
+    .indice-grid{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+      max-height:480px;
+      overflow:auto;
+      padding-right:6px;
+    }
+    .bloque {
+      background: linear-gradient(180deg,#ffffff,#fbfbfd);
+      border-radius:10px;
+      padding:12px 12px;
+      border:1px solid rgba(16,24,40,0.04);
+      box-shadow: 0 6px 18px rgba(13,20,30,0.03);
+      transition: transform .14s ease, box-shadow .14s ease, border-color .18s ease;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .bloque:focus-within, .bloque:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(16,24,40,0.06); border-color: rgba(11,122,255,0.12); }
+
+    /* Accent bar left that alternates colors (blue, green, yellow, red) */
+    .bloque .accent {
+      width:6px;
+      height:44px;
+      border-radius:6px;
+      flex:0 0 6px;
+    }
+    .accent-blue{ background: linear-gradient(180deg,var(--accent1), #2a9bff); }
+    .accent-green{ background: linear-gradient(180deg,var(--accent2), #44e07a); }
+    .accent-yellow{ background: linear-gradient(180deg,var(--accent3), #ffe079); }
+    .accent-red{ background: linear-gradient(180deg,var(--accent4), #ff7a7a); }
+
+    .bloque a{
+      color:var(--text);
+      font-weight:700;
+      text-decoration:none;
+      display:block;
+      font-size:0.985rem;
+      line-height:1.22;
+      letter-spacing:0.2px;
+    }
+    .bloque a small{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-weight:600;
+      font-size:0.81rem;
+    }
+
+    /* improve keyboard focus visibility */
+    .bloque a:focus{
+      outline: none;
+      text-decoration:underline;
+      text-underline-offset:4px;
+    }
+
+    .seccion{
+      background:var(--card);
+      border-radius:var(--card-radius);
+      padding:22px;
+      margin:18px 0;
+      box-shadow: var(--shadow);
+    }
+
+    header, footer { color: #ffffff; }
+    footer{
+      margin-top:36px;
+      background:#0b1220;
+      color:#ffffff;
+      padding:22px 18px;
+      text-align:center;
+      border-top:6px solid rgba(11,122,255,0.08);
+    }
+    footer .redes a{
+      display:inline-block;
+      margin:6px 12px;
+      color:#ffffff;
+      text-decoration:none;
+      font-weight:600;
+    }
+
+    main h2 { margin-top:0; color:var(--text); font-size:1.25rem; }
+    main p { color:var(--text); line-height:1.7; margin:0.6rem 0; }
+    main .muted { color:var(--muted); }
+
+    .downloads{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:10px }
+    .downloads a{ display:inline-block; padding:10px 14px; background:#0b1220; color:#fff; border-radius:10px; text-decoration:none; font-weight:700; }
+    .downloads .secondary{
+      background:transparent;
+      color:var(--muted);
+      border:1px dashed rgba(16,24,40,0.06);
+      padding:8px 12px;
+      font-weight:700;
+    }
+
+    @media (max-width:720px){
+      header{ height:220px }
+      #uan{ width:120px }
+      .btn-legendario{ width:100%; padding:14px 18px }
+      .indice-grid{ grid-template-columns: repeat(1,1fr) }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header id="mainHeader">
+    <img id="mexico" src="mexico.png" alt="Bandera de México" aria-hidden="true">
+    <img id="uan" src="uan.png" alt="Logo UAN">
+    <div class="cabecera-texto">
+      <h1>Proyecto PLC – ICC 2025</h1>
+      <p>Autores: Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez — Ingeniería en Computación | Universidad Autónoma de Nayarit</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="legendario-container" aria-hidden="false">
+      <button id="toggleBtn" class="btn-legendario" aria-expanded="false" aria-controls="indiceVentana" title="Mostrar índice de bloques">
+        <!-- rings (snake-like animated arcs) -->
+        <span class="ring r1" aria-hidden="true"></span>
+        <span class="ring r2" aria-hidden="true"></span>
+        <span class="ring r3" aria-hidden="true"></span>
+        <span class="ring r4" aria-hidden="true"></span>
+
+        <span class="inner">
+          <span class="btnText">PROYECTO 38 BLOQUES</span>
+        </span>
+      </button>
+    </div>
+
+    <div id="indiceVentana" class="indice-ventana" style="display:none" aria-hidden="true">
+      <div class="indice-header">
+        <div class="indice-titulo">Índice de Bloques Especiales (1–38)</div>
+        <div style="color:var(--muted); font-size:0.95rem">Selecciona un bloque para ver su página</div>
+      </div>
+
+      <div id="indiceGrid" class="indice-grid" role="list"></div>
+    </div>
+
+    <section class="seccion" aria-labelledby="intro-title">
+      <h2 id="intro-title">Introducción</h2>
+      <p>Un PLC (Controlador Lógico Programable) es un dispositivo electrónico diseñado para automatizar procesos industriales mediante la supervisión de señales de entrada y el control de salidas. LOGO!Soft Comfort, desarrollado por Siemens, es una herramienta de programación que permite simular, crear y verificar proyectos de control de manera visual e intuitiva. En esta página verás explicaciones técnicas, ejemplos prácticos y recursos descargables para aprender a diseñar, programar y verificar sistemas de control usando bloques especiales del PLC LOGO!.</p>
+      <p>Los bloques especiales son funciones predefinidas con entrada/salida y parámetros que facilitan la creación de estructuras complejas sin programar desde cero. Entre los temas que cubre este proyecto están temporizadores, contadores, bloques analógicos, generadores y herramientas para supervisión y comunicación.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="objetivo-title">
+      <h2 id="objetivo-title">Objetivo del proyecto</h2>
+      <p>Brindar una guía didáctica sobre el uso de LOGO!Soft Comfort, con especial énfasis en los bloques especiales del PLC Siemens LOGO!. El proyecto combina teoría, visuales y ejemplos prácticos para estudiantes de Ingeniería y Automatización, permitiendo practicar programación y simulación antes de la implementación física.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="remanencia-title">
+      <h2 id="remanencia-title">Remanencia</h2>
+      <p>La remanencia es la capacidad del PLC para conservar ciertos valores o estados en memoria incluso después de una interrupción de energía. Esto permite continuar con las mismas condiciones tras restablecer la alimentación, esencial para contadores, temporizadores y banderas de control que no deben reiniciarse automáticamente.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="proteccion-title">
+      <h2 id="proteccion-title">Protección activa</h2>
+      <p>Incluye dispositivos y medidas que protegen el sistema y al operario ante fallas: fusibles, disyuntores, relés térmicos, contactores y toma de tierra. La protección busca interrumpir energía ante fallos, evitando daños a PLC y actuadores.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="conexion-title">
+      <h2 id="conexion-title">Cómo se conecta un PLC</h2>
+      <p>El cableado interconecta entradas (I), salidas (Q) y la fuente de alimentación. Las entradas se conectan a sensores y pulsadores; las salidas controlan contactores, relés o actuadores. Mantener diagramas claros, usar protecciones y seguir el manual del fabricante es imprescindible.</p>
+    </section>
+
+    <section class="seccion" aria-labelledby="descargas-title">
+      <h2 id="descargas-title">Descargas</h2>
+      <p>Descarga el manual o la carpeta con los programas (.lsc).</p>
+      <div class="downloads" role="group" aria-label="Descargas del proyecto">
+        <a href="Manual.pdf" download target="_blank" rel="noopener noreferrer">Descargar manual (PDF)</a>
+        <a href="programa.zip" download target="_blank" rel="noopener noreferrer">Descargar carpeta programa (.zip)</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div style="max-width:1100px;margin:0 auto;">
+      <p>© 2025 | Proyecto PLC - ICC 2025 | Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez</p>
+      <p>Profesor: Ingeniero Ignacio Chávez Arcega | Materia: PLC</p>
+      <div class="redes">
+        <a href="https://www.facebook.com/share/14NZuwbbVwg/" target="_blank">Facebook de Carlos</a>
+        <a href="https://www.facebook.com/share/1EZ4xDHeC3/" target="_blank">Facebook de Miguel</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Show header transition
+    window.addEventListener('load', () => {
+      document.getElementById('mainHeader').classList.add('loaded');
+    });
+
+    // Block names provided by user (corrected)
+    const nombres = [
+      "Retardo en la conexión",
+      "Retardo a la desconexión",
+      "Retardo conexión/desconexión",
+      "Retardo a la conexión con memoria",
+      "Relé de barrido (Salida de impulsos)",
+      "Relé de barrido disparado por flancos",
+      "Generador de impulsos asíncronos",
+      "Generador aleatorio",
+      "Interruptor de alumbrado para escalera",
+      "Interruptor bifuncional",
+      "Temporizador semanal",
+      "Temporizador anual",
+      "Reloj astronómico",
+      "Cronómetro",
+      "Contador adelante/atrás",
+      "Contador de horas de funcionamiento",
+      "Selector de umbral",
+      "Instrucción aritmética",
+      "Comparador analógico",
+      "Conmutador analógico de valor de umbral",
+      "Amplificador analógico",
+      "Vigilancia del valor analógico",
+      "Conmutador analógico de valor umbral diferencial",
+      "MUX analógico",
+      "Rampa analógica",
+      "Regulador PI",
+      "PWM",
+      "Filtro analógico",
+      "Max/Min",
+      "Valor medido",
+      "Relé autoenclavador",
+      "Relé de impulsos",
+      "Texto de aviso",
+      "Interruptor de software",
+      "Registro de desplazamiento",
+      "Detección de error de la instrucción aritmética",
+      "Convertidor flotante/entero",
+      "Convertidor entero/flotante"
+    ];
+
+    const accents = ['accent-blue','accent-green','accent-yellow','accent-red'];
+    const grid = document.getElementById('indiceGrid');
+
+    function generarGrid(){
+      grid.innerHTML = "";
+      for(let i=0;i<nombres.length;i++){
+        const num = i+1;
+        const item = document.createElement('div');
+        item.className = 'bloque';
+        item.setAttribute('role','listitem');
+
+        const acc = document.createElement('div');
+        acc.className = `accent ${accents[i % accents.length]}`;
+        acc.setAttribute('aria-hidden','true');
+        item.appendChild(acc);
+
+        const linkWrapper = document.createElement('div');
+        linkWrapper.style.flex = '1';
+
+        const a = document.createElement('a');
+        a.href = `bloque${num}.html`;
+        a.textContent = `Bloque ${num} - ${nombres[i]}`;
+        a.setAttribute('title', `Abrir Bloque ${num} - ${nombres[i]}`);
+
+        const small = document.createElement('small');
+        small.textContent = `bloque${num}.html`;
+
+        linkWrapper.appendChild(a);
+        linkWrapper.appendChild(small);
+        item.appendChild(linkWrapper);
+
+        a.setAttribute('role','link');
+        a.setAttribute('tabindex','0');
+
+        grid.appendChild(item);
+      }
+    }
+    generarGrid();
+
+    // Toggle index panel
+    const btn = document.getElementById('toggleBtn');
+    const ventana = document.getElementById('indiceVentana');
+
+    btn.addEventListener('click', () => {
+      const isVisible = ventana.style.display === 'block';
+      if(isVisible){
+        ventana.style.animation = 'fadeOut .28s ease forwards';
+        setTimeout(()=> {
+          ventana.style.display = 'none';
+          ventana.setAttribute('aria-hidden','true');
+        }, 260);
+        btn.setAttribute('aria-expanded','false');
+      } else {
+        ventana.style.display = 'block';
+        ventana.style.animation = 'fadeInSlide .36s cubic-bezier(.2,.9,.2,1) forwards';
+        ventana.setAttribute('aria-hidden','false');
+        btn.setAttribute('aria-expanded','true');
+        setTimeout(() => {
+          const firstLink = ventana.querySelector('.bloque a');
+          if(firstLink) firstLink.focus();
+        }, 380);
+      }
+    });
+
+    // keyboard support for links
+    grid.addEventListener('keydown', (e) => {
+      const t = e.target;
+      if((e.key === 'Enter' || e.key === ' ') && t && t.tagName === 'A'){
+        e.preventDefault();
+        window.location = t.href;
+      }
+    });
+
+    // Accessibility: hide rings for reduced motion users
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduce && reduce.matches) {
+      document.querySelectorAll('.btn-legendario .ring').forEach(r => r.style.animation = 'none');
+      document.querySelector('.btn-legendario .btnText').style.animation = 'none';
+    }
+
+    // Small animation keyframes injected
+    (function(){
+      const s = document.createElement('style'); document.head.appendChild(s);
+      s.sheet.insertRule('@keyframes fadeInSlide { from { opacity:0; transform: translateY(-8px) scale(.995) } to { opacity:1; transform: translateY(0) scale(1) } }',0);
+      s.sheet.insertRule('@keyframes fadeOut { from { opacity:1; transform: translateY(0) } to { opacity:0; transform: translateY(-6px) } }',1);
+    })();
+  </script>
+</body>
+</html>
