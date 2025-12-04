@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
@@ -18,6 +18,7 @@
       --card-radius:12px;
     }
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
       font-family: "Segoe UI", Roboto, Arial, sans-serif;
@@ -27,6 +28,37 @@
       -moz-osx-font-smoothing:grayscale;
       line-height:1.55;
     }
+
+    /* Decorative floating ornaments (from folder 'adorno') */
+    .adorno {
+      position:fixed;
+      pointer-events:none;
+      transition: transform 0.9s cubic-bezier(.2,.9,.2,1), opacity .6s;
+      will-change: transform, opacity;
+      z-index:1;
+      filter: drop-shadow(0 8px 30px rgba(2,6,23,0.18));
+      opacity:0.95;
+      mix-blend-mode: screen;
+    }
+    .adorno.small { width:88px; height:auto; opacity:0.95; }
+    .adorno.mid   { width:160px; height:auto; opacity:0.82; }
+    .adorno.large { width:420px; height:auto; opacity:0.08; filter: none; mix-blend-mode: normal; }
+
+    /* positions */
+    .adorno.top-left  { top:14px; left:14px; transform: translateZ(0) translateY(-6px); }
+    .adorno.top-right { top:8px; right:10px; transform: translateZ(0) translateY(-10px); }
+    .adorno.bottom-left { bottom:30px; left:12px; transform: translateZ(0) translateY(8px); }
+    .adorno.bg-right  { position: absolute; right: -6%; top: 22%; width: 48%; opacity:0.12; z-index:0; pointer-events:none; }
+
+    /* gentle float animation */
+    @keyframes floaty {
+      0%   { transform: translateY(0) rotate(-1deg) }
+      50%  { transform: translateY(-8px) rotate(1deg) }
+      100% { transform: translateY(0) rotate(-1deg) }
+    }
+    .float-slow { animation: floaty 8s ease-in-out infinite; }
+    .float-medium { animation: floaty 6.6s ease-in-out infinite; }
+    .float-fast { animation: floaty 5.2s ease-in-out infinite; }
 
     /* HEADER */
     header{
@@ -47,7 +79,7 @@
       pointer-events:none;
       max-width:86%;
     }
-    header .cabecera-texto h1{ margin:0; font-size:2rem; letter-spacing:0.6px }
+    header .cabecera-texto h1{ margin:0; font-size:2rem; letter-spacing:0.6px; display:flex; align-items:center; gap:10px; justify-content:center }
     header .cabecera-texto p{ margin:6px 0 0; opacity:0.95; font-size:0.95rem }
 
     #uan {
@@ -76,7 +108,7 @@
     }
     header.loaded #mexico { right:0; }
 
-    main { padding:28px 20px 70px; max-width:1180px; margin:0 auto; }
+    main { padding:28px 20px 70px; max-width:1180px; margin:0 auto; position:relative; z-index:2; }
 
     .legendario-container{
       margin:18px auto;
@@ -108,8 +140,7 @@
     }
     .btn-legendario:hover{ transform:translateY(-6px); box-shadow:0 26px 80px rgba(2,6,23,0.5) }
 
-    /* Four animated "snake" rings implemented as child spans.
-       Each .ring is a short arc (colored) on a donut shape; they rotate around the button with staggered timing. */
+    /* Four animated "snake" rings implemented as child spans. */
     .btn-legendario .ring {
       position:absolute;
       left:50%;
@@ -119,29 +150,24 @@
       border-radius:999px;
       pointer-events:none;
       z-index:2;
-      /* We'll mask them to show only a thin circular band */
       -webkit-mask-image: radial-gradient(circle, transparent calc(100% - 10px), black calc(100% - 9px));
       mask-image: radial-gradient(circle, transparent calc(100% - 10px), black calc(100% - 9px));
       opacity:0.98;
       mix-blend-mode: screen;
     }
 
-    /* sizes and animations for each ring */
     .btn-legendario .ring.r1{ width:220px; height:56px; background: conic-gradient(var(--accent1) 0deg 35deg, transparent 35deg 360deg); animation: spin1 7.6s linear infinite; }
     .btn-legendario .ring.r2{ width:248px; height:70px; background: conic-gradient(var(--accent2) 0deg 32deg, transparent 32deg 360deg); animation: spin2 9s linear infinite; }
     .btn-legendario .ring.r3{ width:280px; height:84px; background: conic-gradient(var(--accent3) 0deg 30deg, transparent 30deg 360deg); animation: spin3 11s linear infinite; }
     .btn-legendario .ring.r4{ width:312px; height:98px; background: conic-gradient(var(--accent4) 0deg 28deg, transparent 28deg 360deg); animation: spin4 12.6s linear infinite; }
 
-    /* slight different directions and easing to get a following effect */
     @keyframes spin1 { from{ transform: translate(-50%,-50%) rotate(0deg)} to{ transform: translate(-50%,-50%) rotate(360deg)} }
     @keyframes spin2 { from{ transform: translate(-50%,-50%) rotate(30deg)} to{ transform: translate(-50%,-50%) rotate(390deg)} }
     @keyframes spin3 { from{ transform: translate(-50%,-50%) rotate(60deg)} to{ transform: translate(-50%,-50%) rotate(420deg)} }
     @keyframes spin4 { from{ transform: translate(-50%,-50%) rotate(90deg)} to{ transform: translate(-50%,-50%) rotate(450deg)} }
 
-    /* To make arcs appear smoother, add a subtle blur (not overpowering) */
     .btn-legendario .ring { filter: blur(1px); }
 
-    /* center overlay to keep button content on top */
     .btn-legendario .inner {
       position:relative;
       z-index:6;
@@ -150,7 +176,6 @@
       border-radius:8px;
     }
 
-    /* text blend is now smooth/color-diffused */
     .btn-legendario .btnText{
       font-weight:900;
       background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3), var(--accent4));
@@ -185,8 +210,23 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
+      flex-wrap:wrap;
     }
     .indice-titulo{ font-weight:800; font-size:1.02rem; color:var(--muted) }
+
+    /* close button for the index (below the title) */
+    .btn-close {
+      display:inline-block;
+      margin-top:10px;
+      padding:8px 12px;
+      border-radius:8px;
+      background:transparent;
+      color:var(--muted);
+      border:1px solid rgba(16,24,40,0.06);
+      cursor:pointer;
+      font-weight:700;
+    }
+    .btn-close:focus { outline: 3px solid rgba(11,122,255,0.14); }
 
     /* Grid of blocks */
     .indice-grid{
@@ -211,7 +251,6 @@
     }
     .bloque:focus-within, .bloque:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(16,24,40,0.06); border-color: rgba(11,122,255,0.12); }
 
-    /* Accent bar left that alternates colors (blue, green, yellow, red) */
     .bloque .accent {
       width:6px;
       height:44px;
@@ -240,7 +279,6 @@
       font-size:0.81rem;
     }
 
-    /* improve keyboard focus visibility */
     .bloque a:focus{
       outline: none;
       text-decoration:underline;
@@ -253,6 +291,8 @@
       padding:22px;
       margin:18px 0;
       box-shadow: var(--shadow);
+      position:relative;
+      overflow:visible;
     }
 
     header, footer { color: #ffffff; }
@@ -263,6 +303,8 @@
       padding:22px 18px;
       text-align:center;
       border-top:6px solid rgba(11,122,255,0.08);
+      position:relative;
+      overflow:visible;
     }
     footer .redes a{
       display:inline-block;
@@ -286,22 +328,59 @@
       font-weight:700;
     }
 
+    /* small tweaks for ornament layering */
+    .legendario-container::before{
+      content:"";
+      position:absolute;
+      right:4%;
+      top:-6%;
+      width:36%;
+      height:160%;
+      background-image: url("adorno/PLC2.jpg"); /* large subtle PLC device behind the central button */
+      background-size:contain;
+      background-repeat:no-repeat;
+      background-position:center;
+      opacity:0.06;
+      pointer-events:none;
+      z-index:0;
+      transform:translateY(-6%);
+    }
+
     @media (max-width:720px){
       header{ height:220px }
       #uan{ width:120px }
       .btn-legendario{ width:100%; padding:14px 18px }
       .indice-grid{ grid-template-columns: repeat(1,1fr) }
+      .adorno.bg-right { display:none; } /* hide large bg on small screens */
+      .adorno.small { width:66px; }
+      .legendario-container::before { display:none; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Decorative floating ornaments from folder "adorno" -->
+  <!-- Mapping of images you provided:
+       adorno/PLC.gif  -> ilustración tipo monitor (se colocará top-left)
+       adorno/PLC1.jpg -> logito color (se usa near title & top-right)
+       adorno/PLC2.jpg -> gran PLC device (se usa como fondo suave junto al botón)
+       adorno/PLC.webp -> máquina/conveyor (se usará en footer / bottom-left)
+  -->
+  <img src="adorno/PLC.gif" class="adorno top-left small float-medium" alt="" aria-hidden="true" />
+  <img src="adorno/PLC1.jpg" class="adorno top-right small float-slow" alt="" aria-hidden="true" />
+  <img src="adorno/PLC2.jpg" class="adorno bg-right large" alt="" aria-hidden="true" />
+  <img src="adorno/PLC.webp" class="adorno bottom-left mid float-fast" alt="" aria-hidden="true" />
+
   <!-- HEADER -->
-  <header id="mainHeader">
+  <header id="mainHeader" role="banner">
     <img id="mexico" src="mexico.png" alt="Bandera de México" aria-hidden="true">
-    <img id="uan" src="uan.png" alt="Logo UAN">
-    <div class="cabecera-texto">
-      <h1>Proyecto PLC – ICC 2025</h1>
+    <img id="uan" src="uan.png" alt="Logo UAN" aria-hidden="true">
+    <div class="cabecera-texto" role="heading" aria-level="1">
+      <h1>
+        <span>Proyecto PLC – ICC 2025</span>
+        <!-- small badge (decorative) using adorno/PLC1.jpg -->
+        <img src="adorno/PLC1.jpg" alt="" aria-hidden="true" style="width:44px; height:auto; margin-left:8px; filter: drop-shadow(0 4px 18px rgba(0,0,0,.35));" />
+      </h1>
       <p>Autores: Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez — Ingeniería en Control y computación | Universidad Autónoma de Nayarit</p>
     </div>
   </header>
@@ -321,11 +400,14 @@
       </button>
     </div>
 
-    <div id="indiceVentana" class="indice-ventana" style="display:none" aria-hidden="true">
+    <div id="indiceVentana" class="indice-ventana" style="display:none" aria-hidden="true" aria-live="polite">
       <div class="indice-header">
         <div class="indice-titulo">Índice de Bloques Especiales (1–38)</div>
         <div style="color:var(--muted); font-size:0.95rem">Selecciona un bloque para ver su página</div>
       </div>
+
+      <!-- Botón para cerrar el índice (solamente cierra la pestaña del índice) -->
+      <button id="closeIndexBtn" class="btn-close" style="display:none" aria-hidden="true">Cerrar índice</button>
 
       <div id="indiceGrid" class="indice-grid" role="list"></div>
     </div>
@@ -368,14 +450,16 @@
   </main>
 
   <!-- FOOTER -->
-  <footer>
-    <div style="max-width:1100px;margin:0 auto;">
+  <footer role="contentinfo">
+    <div style="max-width:1100px;margin:0 auto; position:relative;">
       <p>© 2025 | Proyecto PLC - ICC 2025 | Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez</p>
       <p>Profesor: Ingeniero Ignacio Chávez Arcega | Materia: PLC</p>
       <div class="redes">
-        <a href="https://www.facebook.com/share/14NZuwbbVwg/" target="_blank">Facebook de Carlos</a>
-        <a href="https://www.facebook.com/share/1EZ4xDHeC3/" target="_blank">Facebook de Miguel</a>
+        <a href="https://www.facebook.com/share/14NZuwbbVwg/" target="_blank" rel="noopener noreferrer">Facebook de Carlos</a>
+        <a href="https://www.facebook.com/share/1EZ4xDHeC3/" target="_blank" rel="noopener noreferrer">Facebook de Miguel</a>
       </div>
+      <!-- small decorative version of the machine on footer (low opacity) -->
+      <img src="adorno/PLC.webp" alt="" aria-hidden="true" style="position:absolute; right:6px; bottom:-28px; width:220px; opacity:0.12; pointer-events:none;" />
     </div>
   </footer>
 
@@ -385,7 +469,7 @@
       document.getElementById('mainHeader').classList.add('loaded');
     });
 
-    // Block names provided by user (corrected)
+    // Block names provided by user
     const nombres = [
       "Retardo en la conexión",
       "Retardo a la desconexión",
@@ -469,26 +553,47 @@
     // Toggle index panel
     const btn = document.getElementById('toggleBtn');
     const ventana = document.getElementById('indiceVentana');
+    const closeBtn = document.getElementById('closeIndexBtn');
+
+    function openIndex() {
+      ventana.style.display = 'block';
+      ventana.style.animation = 'fadeInSlide .36s cubic-bezier(.2,.9,.2,1) forwards';
+      ventana.setAttribute('aria-hidden','false');
+      btn.setAttribute('aria-expanded','true');
+      // show the explicit close button inside the panel
+      closeBtn.style.display = 'inline-block';
+      closeBtn.setAttribute('aria-hidden','false');
+      // focus first link after animation
+      setTimeout(() => {
+        const firstLink = ventana.querySelector('.bloque a');
+        if(firstLink) firstLink.focus();
+      }, 380);
+    }
+
+    function closeIndex(returnFocus=true) {
+      ventana.style.animation = 'fadeOut .28s ease forwards';
+      setTimeout(()=> {
+        ventana.style.display = 'none';
+        ventana.setAttribute('aria-hidden','true');
+        btn.setAttribute('aria-expanded','false');
+        closeBtn.style.display = 'none';
+        closeBtn.setAttribute('aria-hidden','true');
+        if(returnFocus) btn.focus();
+      }, 260);
+    }
 
     btn.addEventListener('click', () => {
       const isVisible = ventana.style.display === 'block';
       if(isVisible){
-        ventana.style.animation = 'fadeOut .28s ease forwards';
-        setTimeout(()=> {
-          ventana.style.display = 'none';
-          ventana.setAttribute('aria-hidden','true');
-        }, 260);
-        btn.setAttribute('aria-expanded','false');
+        closeIndex();
       } else {
-        ventana.style.display = 'block';
-        ventana.style.animation = 'fadeInSlide .36s cubic-bezier(.2,.9,.2,1) forwards';
-        ventana.setAttribute('aria-hidden','false');
-        btn.setAttribute('aria-expanded','true');
-        setTimeout(() => {
-          const firstLink = ventana.querySelector('.bloque a');
-          if(firstLink) firstLink.focus();
-        }, 380);
+        openIndex();
       }
+    });
+
+    // "Cerrar índice" button only closes the index panel (as requested)
+    closeBtn.addEventListener('click', () => {
+      closeIndex();
     });
 
     // keyboard support for links
@@ -498,13 +603,21 @@
         e.preventDefault();
         window.location = t.href;
       }
+      // Support Escape to close the index when focus inside
+      if(e.key === 'Escape'){
+        // close only the index panel
+        if(ventana.style.display === 'block'){
+          closeIndex();
+        }
+      }
     });
 
-    // Accessibility: hide rings for reduced motion users
+    // Accessibility: hide animations for reduced motion users
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     if (reduce && reduce.matches) {
       document.querySelectorAll('.btn-legendario .ring').forEach(r => r.style.animation = 'none');
       document.querySelector('.btn-legendario .btnText').style.animation = 'none';
+      document.querySelectorAll('.float-slow, .float-medium, .float-fast').forEach(el => el.style.animation = 'none');
     }
 
     // Small animation keyframes injected
@@ -512,6 +625,15 @@
       const s = document.createElement('style'); document.head.appendChild(s);
       s.sheet.insertRule('@keyframes fadeInSlide { from { opacity:0; transform: translateY(-8px) scale(.995) } to { opacity:1; transform: translateY(0) scale(1) } }',0);
       s.sheet.insertRule('@keyframes fadeOut { from { opacity:1; transform: translateY(0) } to { opacity:0; transform: translateY(-6px) } }',1);
+    })();
+
+    // Preload decorative images to avoid layout jumps
+    (function preload(){
+      const imgs = ["adorno/PLC.gif","adorno/PLC1.jpg","adorno/PLC2.jpg","adorno/PLC.webp"];
+      imgs.forEach(src => {
+        const i = new Image();
+        i.src = src;
+      });
     })();
   </script>
 </body>
