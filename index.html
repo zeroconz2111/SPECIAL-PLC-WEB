@@ -184,7 +184,7 @@
 
       <section class="seccion" aria-labelledby="remanencia-title">
         <h2 id="remanencia-title">Remanencia</h2>
-        <p>La remanencia es la capacidad del PLC para conservar ciertos valores o estados en memoria incluso después de una interrupción de energía. Esto permite continuar con las mismas condiciones tras restablecer la alimentación.</p>
+        <p>La remanencia en los controladores lógicos programables LOGO! constituye una característica fundamental que permite conservar valores, contadores, marcas internas y estados críticos incluso después de un corte de energía, garantizando que el sistema retome su funcionamiento bajo las mismas condiciones previas al apagado y evitando reinicios no deseados en procesos industriales sensibles; complementariamente, la protección activa integra un conjunto de dispositivos como fusibles de acción rápida, disyuntores magnetotérmicos, relés térmicos, contactores de seguridad y sistemas de puesta a tierra que salvaguardan tanto el equipo como al operario ante fallas eléctricas o sobrecargas, asegurando así un entorno de operación confiable y profesional; finalmente, la correcta conexión de un PLC LOGO! implica estructurar un cableado ordenado y normado donde las entradas (I) reciben señales provenientes de sensores, pulsadores o detectores de presencia, mientras que las salidas (Q) gobiernan actuadores, relés, contactores o módulos auxiliares, todo ello alimentado mediante una fuente estable y protegido con buenas prácticas de instalación, logrando un sistema robusto, escalable y fácil de mantener para cualquier automatización moderna.</p>
 
         <figure class="figure-decor" data-src="adorno/PLC2.jpg" aria-hidden="true">
           <img src="adorno/PLC2.jpg" alt="">
@@ -202,7 +202,7 @@
 
       <section class="seccion" aria-labelledby="conexion-title">
         <h2 id="conexion-title">Cómo se conecta un PLC</h2>
-        <p>El cableado interconecta entradas (I), salidas (Q) y la fuente de alimentación. Las entradas se conectan a sensores y pulsadores; las salidas controlan contactores, relés o actuadores.</p>
+        <p>La conexión de un PLC LOGO! debe realizarse siguiendo una secuencia ordenada que garantice seguridad, claridad y funcionamiento estable, comenzando por la alimentación del módulo principal, donde se conecta la fase y el neutro —o la línea positiva y negativa en modelos de corriente continua— asegurando que el voltaje corresponda exactamente a la especificación del equipo; posteriormente se procede al cableado de entradas digitales, las cuales deben recibir señales limpias y protegidas provenientes de sensores, pulsadores o interruptores, verificando que cada entrada comparta el mismo retorno común y utilizando etiquetas para identificar cada punto; enseguida se realizan las conexiones de las salidas (Q), que suelen ir hacia contactores, relés intermedios o actuadores, cuidando que la carga no exceda la corriente máxima permitida por el PLC y colocando siempre dispositivos de protección como fusibles o disyuntores en serie; adicionalmente se recomienda utilizar canaletas para ordenar los conductores, integrar un punto de tierra firme para el blindaje de cables y chasis, separar líneas de potencia de las de señal para evitar interferencias electromagnéticas y, finalmente, realizar una revisión completa del apriete de terminales, continuidad y correcta identificación del cableado antes de energizar el sistema para garantizar una instalación profesional, segura y confiable.</p>
       </section>
 
       <section class="seccion" aria-labelledby="descargas-title">
@@ -336,7 +336,7 @@
 
     // preload decorative images
     (function preload(){
-      const imgs = ["adorno/PLC.gif","adorno/PLC1.jpg","adorno/PLC2.jpg","adorno/PLC3.webp","uan.png","mexico.png"];
+      const imgs = ["adorno/PLC.gif","adorno/PLC1.jpg","adorno/PLC2.png","adorno/PLC3.webp","uan.png","mexico.png"];
       imgs.forEach(src => { const i = new Image(); i.src = src; });
     })();
   </script>
