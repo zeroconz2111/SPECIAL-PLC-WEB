@@ -16,7 +16,7 @@
       --muted:#6c757d;
       --shadow: 0 6px 24px rgba(16,24,40,0.08);
       --card-radius:12px;
-      --max-content-width:1100px;
+      --content-max:1180px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -27,251 +27,207 @@
       color:var(--text);
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
-      line-height:1.6;
+      line-height:1.55;
+      -webkit-font-feature-settings: "kern";
     }
 
-    /* PAGE CONTAINER */
-    .wrap{ max-width:var(--max-content-width); margin:0 auto; padding:20px; }
+    .container{ max-width:var(--content-max); margin:0 auto; padding:20px; }
 
     /* HEADER */
     header{
       position:relative;
       height:220px;
       overflow:hidden;
-      background:linear-gradient(180deg,#071021 0%, #0b1220 100%);
+      background:linear-gradient(180deg,#071022 0%, #0b1220 100%);
       display:flex;
       align-items:center;
       justify-content:center;
-      color: #fff;
-      border-radius:8px;
-      margin-bottom:18px;
-    }
-    .cabecera-texto{ text-align:center; max-width:88%; z-index:2; }
-    .cabecera-texto h1{ margin:0; font-size:1.9rem; letter-spacing:0.6px; display:inline-flex; align-items:center; gap:.7rem; }
-    .cabecera-texto p{ margin:.6rem 0 0; color:rgba(255,255,255,0.9); font-size:0.95rem; }
-
-    /* Header decorative images (kept simple) */
-    #uan { position:absolute; left:20px; top:50%; width:110px; transform:translateY(-50%); z-index:3; }
-    #mexico { position:absolute; right:0; top:0; height:100%; width:auto; object-fit:cover; opacity:0.14; z-index:1; }
-
-    /* CENTRAL CTA */
-    .legendario-container{ display:flex; justify-content:center; margin:12px 0 20px; position:relative; }
-    .btn-legendario{
-      position:relative;
-      padding:14px 28px;
-      border-radius:12px;
-      background:linear-gradient(180deg,#071022,#000000);
+      border-radius:10px;
       color:#fff;
-      font-weight:800;
-      font-size:1rem;
-      border:0;
-      cursor:pointer;
-      box-shadow:0 12px 36px rgba(2,6,23,0.45);
+      margin-bottom:20px;
     }
-    .btn-legendario:focus{ outline:3px solid rgba(11,122,255,0.14); }
+    .cabecera-texto{ text-align:center; max-width:88%; z-index:2 }
+    .cabecera-texto h1{ margin:0; font-size:1.9rem; letter-spacing:.6px; display:inline-flex; align-items:center; gap:.6rem; }
+    .cabecera-texto p{ margin:.6rem 0 0; color:rgba(255,255,255,0.92); font-size:.95rem }
 
-    /* index panel */
+    /* central CTA */
+    .legendario-container{ text-align:center; margin:10px 0 18px; }
+    .btn-legendario{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:12px 26px; border-radius:12px; background:linear-gradient(180deg,#05070a,#0b1220);
+      color:#fff; font-weight:800; font-size:1rem; letter-spacing:.6px; border:0; cursor:pointer;
+      box-shadow: 0 10px 36px rgba(2,6,23,0.45);
+    }
+
+    /* index panel + close button */
     .indice-ventana{
       margin:18px auto 10px;
+      max-width:920px;
       background:var(--card);
       border-radius:var(--card-radius);
       padding:14px;
       box-shadow: var(--shadow);
       display:none;
     }
-    .indice-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .indice-titulo{ font-weight:800; color:var(--muted); }
-
+    .indice-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .indice-titulo{ font-weight:800; font-size:1.02rem; color:var(--muted) }
     .btn-close {
-      margin-top:8px;
+      margin-top:10px;
       padding:8px 12px;
       border-radius:8px;
-      background:#efefef;
+      background:#f3f4f6;
       color:var(--muted);
       border:1px solid rgba(16,24,40,0.04);
       cursor:pointer;
       font-weight:700;
     }
 
-    .indice-grid{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
-      max-height:420px;
-      overflow:auto;
-      padding-right:6px;
-    }
-    .bloque {
-      background: linear-gradient(180deg,#ffffff,#fbfbfd);
-      border-radius:10px;
-      padding:12px;
-      border:1px solid rgba(16,24,40,0.04);
-      box-shadow: 0 6px 18px rgba(13,20,30,0.03);
-      display:flex;
-      gap:12px;
-      align-items:center;
-    }
+    .indice-grid{ margin-top:12px; display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:12px; max-height:420px; overflow:auto; padding-right:6px; }
+    .bloque { background: linear-gradient(180deg,#ffffff,#fbfbfd); border-radius:10px; padding:12px; border:1px solid rgba(16,24,40,0.04); box-shadow: 0 6px 18px rgba(13,20,30,0.03); display:flex; gap:12px; align-items:center; }
     .bloque a{ color:var(--text); font-weight:700; text-decoration:none; }
     .bloque small{ display:block; color:var(--muted); margin-top:4px; font-weight:600; }
 
-    /* SECTIONS */
-    section{ background:var(--card); border-radius:var(--card-radius); padding:20px; margin:18px 0; box-shadow:var(--shadow); }
-    h2{ margin-top:0; color:var(--text) }
+    /* sections */
+    .seccion{ background:var(--card); border-radius:var(--card-radius); padding:22px; margin:18px 0; box-shadow: var(--shadow); overflow:visible; }
+    main h2 { margin-top:0; color:var(--text); font-size:1.25rem; }
+    main p { color:var(--text); line-height:1.7; margin:0.6rem 0; }
 
-    /* MEDIA FIGURES (now inline and responsive) */
-    .media-row{
-      display:flex;
-      gap:18px;
-      align-items:flex-start;
-      margin:18px 0;
-      flex-wrap:wrap;
-      justify-content:center;
-    }
-    figure.media{
-      background:#fff;
-      border-radius:10px;
+    /* FIGURES - decorative, no text/captions as requested */
+    .figure-decor{
+      display:block;
+      margin:18px auto;
+      width:100%;
+      max-width:720px;
+      border-radius:12px;
       overflow:hidden;
-      width:min(48%, 520px);
-      box-shadow:0 10px 30px rgba(16,24,40,0.06);
-      transition: transform .28s ease, box-shadow .28s ease, opacity .6s ease;
-      opacity:0; transform: translateY(12px);
+      box-shadow: 0 18px 48px rgba(16,24,40,0.06);
+      opacity:0; transform:translateY(12px) scale(.995);
+      transition: opacity .6s ease, transform .6s ease;
+      background:#fff;
     }
-    figure.media.visible{ opacity:1; transform:none; }
-    figure.media img{ width:100%; height:auto; display:block; object-fit:contain; background:#fafbfd; }
-    figure.media figcaption{ padding:10px 12px; color:var(--muted); font-weight:600; font-size:0.92rem; }
+    .figure-decor.visible{ opacity:1; transform:none; }
+    .figure-decor img{ display:block; width:100%; height:auto; object-fit:cover; }
 
-    /* make sure figures don't break paragraphs: placed between sections (not inside <p>) */
+    /* small ornament strips around content for subtle decoration */
+    .decor-strip{ height:8px; border-radius:8px; margin:12px 0; background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3),var(--accent4)); opacity:.12 }
 
-    /* FOOTER */
-    footer{ margin-top:28px; background:#0b1220; color:#fff; padding:20px; border-radius:8px; text-align:center; }
+    /* footer */
+    footer{ margin-top:36px; background:#0b1220; color:#fff; padding:22px 18px; text-align:center; border-radius:10px; }
 
-    /* RESPONSIVE */
     @media (max-width:900px){
-      figure.media{ width:100%; }
-      #uan{ display:none; }
-      #mexico{ opacity:0.08; }
+      .figure-decor{ max-width:92%; }
+      header{ height:200px }
+      .btn-legendario{ width:100%; padding:12px; }
     }
-
     @media (prefers-reduced-motion: reduce){
-      .media, .btn-legendario { transition:none !important; animation:none !important; }
+      .figure-decor, .btn-legendario { transition:none !important; animation:none !important; transform:none !important; opacity:1 !important; }
     }
-
-    /* simple accessibility helpers */
-    .sr-only{ position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-
-    <header role="banner" aria-label="Cabecera del proyecto PLC">
-      <img id="uan" src="uan.png" alt="Logo UAN" aria-hidden="true" />
-      <img id="mexico" src="mexico.png" alt="" aria-hidden="true" />
+  <div class="container">
+    <!-- HEADER -->
+    <header id="mainHeader" role="banner">
       <div class="cabecera-texto">
         <h1>Proyecto PLC – ICC 2025
-          <img src="adorno/PLC1.jpg" alt="" aria-hidden="true" style="width:40px; height:auto; border-radius:6px; margin-left:6px;" />
+          <img src="adorno/PLC1.jpg" alt="" style="width:36px; height:auto; margin-left:8px; border-radius:6px; vertical-align:middle;">
         </h1>
-        <p>Autores: Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez — Ingeniería en Control y Computación | Universidad Autónoma de Nayarit</p>
+        <p>Autores: Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez — Ingeniería en Control y computación | Universidad Autónoma de Nayarit</p>
       </div>
     </header>
 
-    <div class="legendario-container" aria-hidden="false">
-      <button id="toggleBtn" class="btn-legendario" aria-expanded="false" aria-controls="indiceVentana" aria-label="Abrir índice de bloques">
-        PROYECTO 38 BLOQUES
-      </button>
+    <!-- CTA / INDEX -->
+    <div class="legendario-container">
+      <button id="toggleBtn" class="btn-legendario" aria-expanded="false" aria-controls="indiceVentana">PROYECTO 38 BLOQUES</button>
     </div>
 
     <div id="indiceVentana" class="indice-ventana" aria-hidden="true" aria-live="polite">
       <div class="indice-header">
-        <div>
-          <div class="indice-titulo">Índice de Bloques Especiales (1–38)</div>
-          <div style="color:var(--muted); font-size:0.92rem">Selecciona un bloque para ver su página</div>
-        </div>
-        <div>
-          <button id="closeIndexBtn" class="btn-close" aria-label="Cerrar índice" style="display:none">Cerrar índice</button>
-        </div>
+        <div class="indice-titulo">Índice de Bloques Especiales (1–38)</div>
+        <div style="color:var(--muted); font-size:.95rem">Selecciona un bloque para ver su página</div>
+      </div>
+
+      <!-- Close button requested (only closes the index panel) -->
+      <div style="text-align:right; margin-top:8px;">
+        <button id="closeIndexBtn" class="btn-close" style="display:none">Cerrar índice</button>
       </div>
 
       <div id="indiceGrid" class="indice-grid" role="list"></div>
     </div>
 
-    <section aria-labelledby="intro-title">
-      <h2 id="intro-title">Introducción</h2>
-      <p>Un PLC (Controlador Lógico Programable) es un dispositivo electrónico diseñado para automatizar procesos industriales mediante la supervisión de señales de entrada y el control de salidas. LOGO!Soft Comfort, desarrollado por Siemens, es una herramienta de programación que permite simular, crear y verificar proyectos de control de manera visual e intuitiva.</p>
+    <div class="decor-strip" aria-hidden="true"></div>
 
-      <div class="media-row" aria-hidden="false">
-        <figure class="media" data-src="adorno/PLC.gif" tabindex="0">
-          <img src="adorno/PLC.gif" alt="Ilustración de interfaz PLC" onerror="this.style.opacity=.12; this.nextElementSibling.innerText='Imagen no disponible';" />
-          <figcaption>Interfaz y nodos del PLC — ayuda visual para el aprendizaje</figcaption>
+    <!-- SECTIONS + decorative figures (no descriptions, alt empty) -->
+    <main>
+      <section class="seccion" aria-labelledby="intro-title">
+        <h2 id="intro-title">Introducción</h2>
+        <p>Un PLC (Controlador Lógico Programable) es un dispositivo electrónico diseñado para automatizar procesos industriales mediante la supervisión de señales de entrada y el control de salidas. LOGO!Soft Comfort, desarrollado por Siemens, es una herramienta de programación que permite simular, crear y verificar proyectos de control de manera visual e intuitiva.</p>
+
+        <!-- decorative figure (no description text) -->
+        <figure class="figure-decor" data-src="adorno/PLC.gif" aria-hidden="true">
+          <img src="adorno/PLC.gif" alt="">
         </figure>
 
-        <figure class="media" data-src="adorno/PLC1.jpg" tabindex="0">
-          <img src="adorno/PLC1.jpg" alt="Logotipo del proyecto PLC" onerror="this.style.opacity=.12; this.nextElementSibling.innerText='Imagen no disponible';" />
-          <figcaption>Identidad del proyecto</figcaption>
+        <p>Los bloques especiales son funciones predefinidas con entrada/salida y parámetros que facilitan la creación de estructuras complejas sin programar desde cero. Entre los temas que cubre este proyecto están temporizadores, contadores, bloques analógicos, generadores y herramientas para supervisión y comunicación.</p>
+      </section>
+
+      <section class="seccion" aria-labelledby="objetivo-title">
+        <h2 id="objetivo-title">Objetivo del proyecto</h2>
+        <p>Brindar una guía didáctica sobre el uso de LOGO!Soft Comfort, con especial énfasis en los bloques especiales del PLC Siemens LOGO!. El proyecto combina teoría, visuales y ejemplos prácticos para estudiantes de Ingeniería y Automatización, permitiendo practicar programación y simulación antes de la implementación física.</p>
+
+        <figure class="figure-decor" data-src="adorno/PLC1.jpg" aria-hidden="true">
+          <img src="adorno/PLC1.jpg" alt="">
         </figure>
-      </div>
+      </section>
 
-      <p>En esta página verás explicaciones técnicas, ejemplos prácticos y recursos descargables para aprender a diseñar, programar y verificar sistemas de control usando bloques especiales del PLC LOGO!.</p>
-    </section>
+      <section class="seccion" aria-labelledby="remanencia-title">
+        <h2 id="remanencia-title">Remanencia</h2>
+        <p>La remanencia es la capacidad del PLC para conservar ciertos valores o estados en memoria incluso después de una interrupción de energía. Esto permite continuar con las mismas condiciones tras restablecer la alimentación.</p>
 
-    <section aria-labelledby="objetivo-title">
-      <h2 id="objetivo-title">Objetivo del proyecto</h2>
-      <p>Brindar una guía didáctica sobre el uso de LOGO!Soft Comfort, con especial énfasis en los bloques especiales del PLC Siemens LOGO!. El proyecto combina teoría, visuales y ejemplos prácticos para estudiantes de Ingeniería y Automatización.</p>
-
-      <div class="media-row">
-        <figure class="media" data-src="adorno/PLC2.jpg" tabindex="0">
-          <img src="adorno/PLC2.jpg" alt="Dispositivo PLC ilustrado" onerror="this.style.opacity=.12; this.nextElementSibling.innerText='Imagen no disponible';" />
-          <figcaption>Ejemplo de hardware PLC — entradas, salidas y terminales</figcaption>
+        <figure class="figure-decor" data-src="adorno/PLC2.jpg" aria-hidden="true">
+          <img src="adorno/PLC2.jpg" alt="">
         </figure>
-      </div>
+      </section>
 
-    </section>
+      <section class="seccion" aria-labelledby="proteccion-title">
+        <h2 id="proteccion-title">Protección activa</h2>
+        <p>Incluye dispositivos y medidas que protegen el sistema y al operario ante fallas: fusibles, disyuntores, relés térmicos, contactores y toma de tierra.</p>
 
-    <section aria-labelledby="remanencia-title">
-      <h2 id="remanencia-title">Remanencia</h2>
-      <p>La remanencia es la capacidad del PLC para conservar ciertos valores o estados en memoria incluso después de una interrupción de energía. Esto permite continuar con las mismas condiciones tras restablecer la alimentación.</p>
-
-      <div class="media-row">
-        <figure class="media" data-src="adorno/PLC.webp" tabindex="0">
-          <img src="adorno/PLC.webp" alt="Máquina con cinta transportadora controlada por PLC" onerror="this.style.opacity=.12; this.nextElementSibling.innerText='Imagen no disponible';" />
-          <figcaption>Proceso industrial controlado por PLC</figcaption>
+        <figure class="figure-decor" data-src="adorno/PLC.webp" aria-hidden="true">
+          <img src="adorno/PLC.webp" alt="">
         </figure>
-      </div>
-    </section>
+      </section>
 
-    <section aria-labelledby="conexion-title">
-      <h2 id="conexion-title">Cómo se conecta un PLC</h2>
-      <p>El cableado interconecta entradas (I), salidas (Q) y la fuente de alimentación. Las entradas se conectan a sensores y pulsadores; las salidas controlan contactores, relés o actuadores.</p>
-    </section>
+      <section class="seccion" aria-labelledby="conexion-title">
+        <h2 id="conexion-title">Cómo se conecta un PLC</h2>
+        <p>El cableado interconecta entradas (I), salidas (Q) y la fuente de alimentación. Las entradas se conectan a sensores y pulsadores; las salidas controlan contactores, relés o actuadores.</p>
+      </section>
 
-    <section aria-labelledby="descargas-title">
-      <h2 id="descargas-title">Descargas</h2>
-      <div class="downloads" role="group" aria-label="Descargas">
-        <a href="Manual.pdf" download>Descargar manual (PDF)</a>
-        <a href="programa.zip" download>Descargar carpeta programa (.zip)</a>
-      </div>
-    </section>
+      <section class="seccion" aria-labelledby="descargas-title">
+        <h2 id="descargas-title">Descargas</h2>
+        <p>Descarga el manual o la carpeta con los programas (.lsc).</p>
+        <div class="downloads" role="group" aria-label="Descargas del proyecto">
+          <a href="Manual.pdf" download target="_blank" rel="noopener noreferrer">Descargar manual (PDF)</a>
+          <a href="programa.zip" download target="_blank" rel="noopener noreferrer">Descargar carpeta programa (.zip)</a>
+        </div>
+      </section>
+    </main>
+
+    <div class="decor-strip" aria-hidden="true"></div>
 
     <footer>
-      <p>© 2025 | Proyecto PLC - ICC 2025 | Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez</p>
-      <p>Profesor: Ingeniero Ignacio Chávez Arcega | Materia: PLC</p>
+      <div style="max-width:1100px;margin:0 auto;">
+        <p>© 2025 | Proyecto PLC - ICC 2025 | Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez</p>
+        <p>Profesor: Ingeniero Ignacio Chávez Arcega | Materia: PLC</p>
+      </div>
     </footer>
-
   </div>
 
   <script>
-    // Show header little animation
-    window.addEventListener('load', () => {
-      document.querySelector('header').classList.add('loaded');
-    });
+    // header loaded class (simple)
+    window.addEventListener('load', () => document.getElementById('mainHeader')?.classList?.add('loaded'));
 
-    // Block names
+    // block names
     const nombres = [
       "Retardo en la conexión","Retardo a la desconexión","Retardo conexión/desconexión","Retardo a la conexión con memoria",
       "Relé de barrido (Salida de impulsos)","Relé de barrido disparado por flancos","Generador de impulsos asíncronos","Generador aleatorio",
@@ -321,43 +277,45 @@
     }
     generarGrid();
 
-    // Toggle index panel
-    const btn = document.getElementById('toggleBtn');
-    const ventana = document.getElementById('indiceVentana');
-    const closeBtn = document.getElementById('closeIndexBtn');
+    // toggle index panel + explicit close button
+    const toggleBtn = document.getElementById('toggleBtn');
+    const indiceVentana = document.getElementById('indiceVentana');
+    const closeIndexBtn = document.getElementById('closeIndexBtn');
 
     function openIndex(){
-      ventana.style.display = 'block';
-      ventana.setAttribute('aria-hidden','false');
-      btn.setAttribute('aria-expanded','true');
-      closeBtn.style.display = 'inline-block';
-      closeBtn.focus();
+      indiceVentana.style.display = 'block';
+      indiceVentana.setAttribute('aria-hidden','false');
+      toggleBtn.setAttribute('aria-expanded','true');
+      closeIndexBtn.style.display = 'inline-block';
+      // focus first link for keyboard users
+      setTimeout(()=> {
+        const firstLink = indiceVentana.querySelector('.bloque a');
+        if(firstLink) firstLink.focus();
+      }, 260);
     }
     function closeIndex(){
-      ventana.style.display = 'none';
-      ventana.setAttribute('aria-hidden','true');
-      btn.setAttribute('aria-expanded','false');
-      closeBtn.style.display = 'none';
-      btn.focus();
+      indiceVentana.style.display = 'none';
+      indiceVentana.setAttribute('aria-hidden','true');
+      toggleBtn.setAttribute('aria-expanded','false');
+      closeIndexBtn.style.display = 'none';
+      toggleBtn.focus();
     }
-    btn.addEventListener('click', () => {
-      const visible = ventana.style.display === 'block';
-      if(visible) closeIndex(); else openIndex();
-    });
-    closeBtn.addEventListener('click', closeIndex);
 
-    // Keyboard accessibility: ESC closes index if open
+    toggleBtn.addEventListener('click', () => {
+      if(indiceVentana.style.display === 'block') closeIndex(); else openIndex();
+    });
+    closeIndexBtn.addEventListener('click', closeIndex);
     document.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape' && ventana.style.display === 'block') closeIndex();
+      if(e.key === 'Escape' && indiceVentana.style.display === 'block') closeIndex();
     });
 
-    // Reveal media with IntersectionObserver (avoid interrupting text)
-    (function revealMedia(){
-      const items = Array.from(document.querySelectorAll('figure.media'));
-      if(items.length === 0) return;
+    // Reveal decorative figures on scroll (non-blocking) - no captions/descriptions as requested
+    (function revealFigures(){
+      const figures = Array.from(document.querySelectorAll('.figure-decor'));
+      if(figures.length === 0) return;
       const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if(prefersReduced){
-        items.forEach(i => i.classList.add('visible'));
+        figures.forEach(f => f.classList.add('visible'));
         return;
       }
       if('IntersectionObserver' in window){
@@ -368,17 +326,17 @@
               obs.unobserve(en.target);
             }
           });
-        }, {threshold: 0.18});
-        items.forEach(i => io.observe(i));
+        }, {threshold: 0.15});
+        figures.forEach(f => io.observe(f));
       } else {
-        items.forEach(i => i.classList.add('visible'));
+        figures.forEach(f => f.classList.add('visible'));
       }
     })();
 
-    // Preload images (quietly)
+    // preload decorative images to avoid jumps
     (function preload(){
-      const imgs = ["adorno/PLC.gif","adorno/PLC1.jpg","adorno/PLC2.jpg","adorno/PLC.webp","uan.png","mexico.png"];
-      imgs.forEach(src => { const im = new Image(); im.src = src; });
+      const imgs = ["adorno/PLC.gif","adorno/PLC1.jpg","adorno/PLC2.jpg","adorno/PLC.webp"];
+      imgs.forEach(src => { const i = new Image(); i.src = src; });
     })();
   </script>
 </body>
