@@ -28,12 +28,11 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       line-height:1.55;
-      -webkit-font-feature-settings: "kern";
     }
 
     .container{ max-width:var(--content-max); margin:0 auto; padding:20px; }
 
-    /* HEADER */
+    /* HEADER: restored to only México + UAN visuals */
     header{
       position:relative;
       height:220px;
@@ -47,8 +46,12 @@
       margin-bottom:20px;
     }
     .cabecera-texto{ text-align:center; max-width:88%; z-index:2 }
-    .cabecera-texto h1{ margin:0; font-size:1.9rem; letter-spacing:.6px; display:inline-flex; align-items:center; gap:.6rem; }
+    .cabecera-texto h1{ margin:0; font-size:1.9rem; letter-spacing:.6px; }
     .cabecera-texto p{ margin:.6rem 0 0; color:rgba(255,255,255,0.92); font-size:.95rem }
+
+    /* mexico and uan images in header (only these two now) */
+    #uan { position:absolute; left:18px; top:50%; width:110px; transform:translateY(-50%); z-index:3; }
+    #mexico { position:absolute; right:0; top:0; height:100%; width:auto; object-fit:cover; opacity:0.12; z-index:1; }
 
     /* central CTA */
     .legendario-container{ text-align:center; margin:10px 0 18px; }
@@ -92,7 +95,7 @@
     main h2 { margin-top:0; color:var(--text); font-size:1.25rem; }
     main p { color:var(--text); line-height:1.7; margin:0.6rem 0; }
 
-    /* FIGURES - decorative, no text/captions as requested */
+    /* FIGURES - decorative, no descriptions (alt empty) */
     .figure-decor{
       display:block;
       margin:18px auto;
@@ -108,16 +111,16 @@
     .figure-decor.visible{ opacity:1; transform:none; }
     .figure-decor img{ display:block; width:100%; height:auto; object-fit:cover; }
 
-    /* small ornament strips around content for subtle decoration */
     .decor-strip{ height:8px; border-radius:8px; margin:12px 0; background:linear-gradient(90deg,var(--accent1),var(--accent2),var(--accent3),var(--accent4)); opacity:.12 }
 
-    /* footer */
     footer{ margin-top:36px; background:#0b1220; color:#fff; padding:22px 18px; text-align:center; border-radius:10px; }
 
     @media (max-width:900px){
       .figure-decor{ max-width:92%; }
       header{ height:200px }
       .btn-legendario{ width:100%; padding:12px; }
+      #uan{ display:none; }
+      #mexico{ opacity:0.06; }
     }
     @media (prefers-reduced-motion: reduce){
       .figure-decor, .btn-legendario { transition:none !important; animation:none !important; transform:none !important; opacity:1 !important; }
@@ -126,12 +129,12 @@
 </head>
 <body>
   <div class="container">
-    <!-- HEADER -->
+    <!-- HEADER restored: only mexico + uan -->
     <header id="mainHeader" role="banner">
+      <img id="uan" src="uan.png" alt="Logo UAN" aria-hidden="true">
+      <img id="mexico" src="mexico.png" alt="" aria-hidden="true">
       <div class="cabecera-texto">
-        <h1>Proyecto PLC – ICC 2025
-          <img src="adorno/PLC1.jpg" alt="" style="width:36px; height:auto; margin-left:8px; border-radius:6px; vertical-align:middle;">
-        </h1>
+        <h1>Proyecto PLC – ICC 2025</h1>
         <p>Autores: Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez — Ingeniería en Control y computación | Universidad Autónoma de Nayarit</p>
       </div>
     </header>
@@ -147,7 +150,6 @@
         <div style="color:var(--muted); font-size:.95rem">Selecciona un bloque para ver su página</div>
       </div>
 
-      <!-- Close button requested (only closes the index panel) -->
       <div style="text-align:right; margin-top:8px;">
         <button id="closeIndexBtn" class="btn-close" style="display:none">Cerrar índice</button>
       </div>
@@ -157,13 +159,12 @@
 
     <div class="decor-strip" aria-hidden="true"></div>
 
-    <!-- SECTIONS + decorative figures (no descriptions, alt empty) -->
     <main>
       <section class="seccion" aria-labelledby="intro-title">
         <h2 id="intro-title">Introducción</h2>
         <p>Un PLC (Controlador Lógico Programable) es un dispositivo electrónico diseñado para automatizar procesos industriales mediante la supervisión de señales de entrada y el control de salidas. LOGO!Soft Comfort, desarrollado por Siemens, es una herramienta de programación que permite simular, crear y verificar proyectos de control de manera visual e intuitiva.</p>
 
-        <!-- decorative figure (no description text) -->
+        <!-- decorative figure moved here (PLC.gif) -->
         <figure class="figure-decor" data-src="adorno/PLC.gif" aria-hidden="true">
           <img src="adorno/PLC.gif" alt="">
         </figure>
@@ -173,8 +174,9 @@
 
       <section class="seccion" aria-labelledby="objetivo-title">
         <h2 id="objetivo-title">Objetivo del proyecto</h2>
-        <p>Brindar una guía didáctica sobre el uso de LOGO!Soft Comfort, con especial énfasis en los bloques especiales del PLC Siemens LOGO!. El proyecto combina teoría, visuales y ejemplos prácticos para estudiantes de Ingeniería y Automatización, permitiendo practicar programación y simulación antes de la implementación física.</p>
+        <p>Brindar una guía didáctica sobre el uso de LOGO!Soft Comfort, con especial énfasis en los bloques especiales del PLC Siemens LOGO!. El proyecto combina teoría, visuales y ejemplos prácticos para estudiantes de Ingeniería y Automatización.</p>
 
+        <!-- PLC1.jpg placed in content (not header) as you requested -->
         <figure class="figure-decor" data-src="adorno/PLC1.jpg" aria-hidden="true">
           <img src="adorno/PLC1.jpg" alt="">
         </figure>
@@ -224,10 +226,10 @@
   </div>
 
   <script>
-    // header loaded class (simple)
+    // header loaded marker (keeps no extra image in header)
     window.addEventListener('load', () => document.getElementById('mainHeader')?.classList?.add('loaded'));
 
-    // block names
+    // Block names
     const nombres = [
       "Retardo en la conexión","Retardo a la desconexión","Retardo conexión/desconexión","Retardo a la conexión con memoria",
       "Relé de barrido (Salida de impulsos)","Relé de barrido disparado por flancos","Generador de impulsos asíncronos","Generador aleatorio",
@@ -277,7 +279,7 @@
     }
     generarGrid();
 
-    // toggle index panel + explicit close button
+    // toggle index panel
     const toggleBtn = document.getElementById('toggleBtn');
     const indiceVentana = document.getElementById('indiceVentana');
     const closeIndexBtn = document.getElementById('closeIndexBtn');
@@ -287,7 +289,6 @@
       indiceVentana.setAttribute('aria-hidden','false');
       toggleBtn.setAttribute('aria-expanded','true');
       closeIndexBtn.style.display = 'inline-block';
-      // focus first link for keyboard users
       setTimeout(()=> {
         const firstLink = indiceVentana.querySelector('.bloque a');
         if(firstLink) firstLink.focus();
@@ -309,7 +310,7 @@
       if(e.key === 'Escape' && indiceVentana.style.display === 'block') closeIndex();
     });
 
-    // Reveal decorative figures on scroll (non-blocking) - no captions/descriptions as requested
+    // reveal decorative figures when they enter viewport
     (function revealFigures(){
       const figures = Array.from(document.querySelectorAll('.figure-decor'));
       if(figures.length === 0) return;
@@ -333,9 +334,9 @@
       }
     })();
 
-    // preload decorative images to avoid jumps
+    // preload decorative images
     (function preload(){
-      const imgs = ["adorno/PLC.gif","adorno/PLC1.jpg","adorno/PLC2.jpg","adorno/PLC.webp"];
+      const imgs = ["adorno/PLC.gif","adorno/PLC1.jpg","adorno/PLC2.jpg","adorno/PLC3.webp","uan.png","mexico.png"];
       imgs.forEach(src => { const i = new Image(); i.src = src; });
     })();
   </script>
