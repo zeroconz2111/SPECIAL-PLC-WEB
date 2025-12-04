@@ -16,6 +16,7 @@
       --muted:#6c757d;
       --shadow: 0 6px 24px rgba(16,24,40,0.08);
       --card-radius:12px;
+      --content-adorno-max:46%;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -29,38 +30,7 @@
       line-height:1.55;
     }
 
-    /* Decorative floating ornaments (from folder 'adorno') */
-    .adorno {
-      position:fixed;
-      pointer-events:none;
-      transition: transform 0.9s cubic-bezier(.2,.9,.2,1), opacity .6s;
-      will-change: transform, opacity;
-      z-index:1;
-      filter: drop-shadow(0 8px 30px rgba(2,6,23,0.18));
-      opacity:0.95;
-      mix-blend-mode: screen;
-    }
-    .adorno.small { width:88px; height:auto; opacity:0.95; }
-    .adorno.mid   { width:160px; height:auto; opacity:0.82; }
-    .adorno.large { width:420px; height:auto; opacity:0.08; filter: none; mix-blend-mode: normal; }
-
-    /* positions */
-    .adorno.top-left  { top:14px; left:14px; transform: translateZ(0) translateY(-6px); }
-    .adorno.top-right { top:8px; right:10px; transform: translateZ(0) translateY(-10px); }
-    .adorno.bottom-left { bottom:30px; left:12px; transform: translateZ(0) translateY(8px); }
-    .adorno.bg-right  { position: absolute; right: -6%; top: 22%; width: 48%; opacity:0.12; z-index:0; pointer-events:none; }
-
-    /* gentle float animation */
-    @keyframes floaty {
-      0%   { transform: translateY(0) rotate(-1deg) }
-      50%  { transform: translateY(-8px) rotate(1deg) }
-      100% { transform: translateY(0) rotate(-1deg) }
-    }
-    .float-slow { animation: floaty 8s ease-in-out infinite; }
-    .float-medium { animation: floaty 6.6s ease-in-out infinite; }
-    .float-fast { animation: floaty 5.2s ease-in-out infinite; }
-
-    /* HEADER */
+    /* General layout */
     header{
       position:relative;
       height:260px;
@@ -69,307 +39,134 @@
       display:flex;
       align-items:center;
       justify-content:center;
+      color: #fff;
     }
     header .cabecera-texto{
       position:relative;
       z-index:6;
       text-align:center;
-      color:#fff;
-      text-shadow:0 2px 8px rgba(0,0,0,0.6);
       pointer-events:none;
       max-width:86%;
+      text-shadow:0 2px 8px rgba(0,0,0,0.6);
     }
     header .cabecera-texto h1{ margin:0; font-size:2rem; letter-spacing:0.6px; display:flex; align-items:center; gap:10px; justify-content:center }
     header .cabecera-texto p{ margin:6px 0 0; opacity:0.95; font-size:0.95rem }
 
-    #uan {
-      position:absolute;
-      width:140px;
-      top:50%;
-      left:50%;
-      transform:translate(-50%,-50%);
-      z-index:4;
-      transition: left 0.9s cubic-bezier(.2,.9,.2,1), transform 0.9s;
-      pointer-events:none;
-      mix-blend-mode:screen;
-      opacity:0.95;
-    }
+    #uan { position:absolute; width:140px; top:50%; left:50%; transform:translate(-50%,-50%); z-index:4; transition: left .9s, transform .9s; pointer-events:none; mix-blend-mode:screen; opacity:0.95; }
     header.loaded #uan { left:10%; transform:translateY(-50%); }
 
-    #mexico {
-      position:absolute;
-      top:0; right:-120%;
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      z-index:2;
-      filter:brightness(0.55);
-      transition: right 1s cubic-bezier(.22,.9,.32,1) 0.6s;
-    }
+    #mexico { position:absolute; top:0; right:-120%; width:100%; height:100%; object-fit:cover; z-index:2; filter:brightness(0.55); transition: right 1s 0.6s; }
     header.loaded #mexico { right:0; }
 
     main { padding:28px 20px 70px; max-width:1180px; margin:0 auto; position:relative; z-index:2; }
 
-    .legendario-container{
-      margin:18px auto;
-      position:relative;
-      text-align:center;
-      width:100%;
-      max-width:920px;
-      overflow:visible;
-      border-radius:16px;
-    }
+    /* CENTRAL BUTTON */
+    .legendario-container{ margin:18px auto; position:relative; text-align:center; width:100%; max-width:920px; overflow:visible; border-radius:16px; }
 
-    /* Button base */
     .btn-legendario{
-      position:relative;
-      display:inline-block;
-      padding:16px 34px;
-      border-radius:14px;
-      background: #050505; /* black background */
-      color:var(--card);
-      font-weight:800;
-      font-size:1.05rem;
-      letter-spacing:0.6px;
-      border: 2px solid rgba(255,255,255,0.06);
-      box-shadow: 0 12px 36px rgba(2,6,23,0.45), 0 4px 12px rgba(0,0,0,0.4);
-      cursor:pointer;
-      transition: transform .28s ease, box-shadow .28s ease;
-      z-index:10;
-      overflow:visible;
+      position:relative; display:inline-block; padding:16px 34px; border-radius:14px; background:#050505; color:var(--card);
+      font-weight:800; font-size:1.05rem; letter-spacing:0.6px; border:2px solid rgba(255,255,255,0.06);
+      box-shadow: 0 12px 36px rgba(2,6,23,0.45), 0 4px 12px rgba(0,0,0,0.4); cursor:pointer; transition: transform .28s, box-shadow .28s;
+      z-index:10; overflow:visible;
     }
     .btn-legendario:hover{ transform:translateY(-6px); box-shadow:0 26px 80px rgba(2,6,23,0.5) }
 
-    /* Four animated "snake" rings implemented as child spans. */
-    .btn-legendario .ring {
-      position:absolute;
-      left:50%;
-      top:50%;
-      transform-origin:50% 50%;
-      transform: translate(-50%,-50%) rotate(0deg);
-      border-radius:999px;
-      pointer-events:none;
-      z-index:2;
-      -webkit-mask-image: radial-gradient(circle, transparent calc(100% - 10px), black calc(100% - 9px));
-      mask-image: radial-gradient(circle, transparent calc(100% - 10px), black calc(100% - 9px));
-      opacity:0.98;
-      mix-blend-mode: screen;
+    .btn-legendario .ring { position:absolute; left:50%; top:50%; transform-origin:50% 50%; transform: translate(-50%,-50%) rotate(0deg); border-radius:999px; pointer-events:none; z-index:2;
+      -webkit-mask-image: radial-gradient(circle, transparent calc(100% - 10px), black calc(100% - 9px)); mask-image: radial-gradient(circle, transparent calc(100% - 10px), black calc(100% - 9px));
+      opacity:0.98; mix-blend-mode: screen; filter: blur(1px);
     }
-
     .btn-legendario .ring.r1{ width:220px; height:56px; background: conic-gradient(var(--accent1) 0deg 35deg, transparent 35deg 360deg); animation: spin1 7.6s linear infinite; }
     .btn-legendario .ring.r2{ width:248px; height:70px; background: conic-gradient(var(--accent2) 0deg 32deg, transparent 32deg 360deg); animation: spin2 9s linear infinite; }
     .btn-legendario .ring.r3{ width:280px; height:84px; background: conic-gradient(var(--accent3) 0deg 30deg, transparent 30deg 360deg); animation: spin3 11s linear infinite; }
     .btn-legendario .ring.r4{ width:312px; height:98px; background: conic-gradient(var(--accent4) 0deg 28deg, transparent 28deg 360deg); animation: spin4 12.6s linear infinite; }
-
     @keyframes spin1 { from{ transform: translate(-50%,-50%) rotate(0deg)} to{ transform: translate(-50%,-50%) rotate(360deg)} }
     @keyframes spin2 { from{ transform: translate(-50%,-50%) rotate(30deg)} to{ transform: translate(-50%,-50%) rotate(390deg)} }
     @keyframes spin3 { from{ transform: translate(-50%,-50%) rotate(60deg)} to{ transform: translate(-50%,-50%) rotate(420deg)} }
     @keyframes spin4 { from{ transform: translate(-50%,-50%) rotate(90deg)} to{ transform: translate(-50%,-50%) rotate(450deg)} }
 
-    .btn-legendario .ring { filter: blur(1px); }
+    .btn-legendario .inner { position:relative; z-index:6; display:inline-block; padding:6px 10px; border-radius:8px; }
+    .btn-legendario .btnText{ font-weight:900; background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3), var(--accent4)); background-size: 400% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; animation: textBlend 8s linear infinite; z-index:7; display:inline-block; }
+    @keyframes textBlend { 0%{background-position:0% 50%} 25%{background-position:25% 50%} 50%{background-position:50% 50%} 75%{background-position:75% 50%} 100%{background-position:0% 50%} }
 
-    .btn-legendario .inner {
-      position:relative;
-      z-index:6;
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:8px;
-    }
-
-    .btn-legendario .btnText{
-      font-weight:900;
-      background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3), var(--accent4));
-      background-size: 400% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      animation: textBlend 8s linear infinite;
-      z-index:7;
-      display:inline-block;
-    }
-    @keyframes textBlend {
-      0%   { background-position:   0% 50%; }
-      25%  { background-position:  25% 50%; }
-      50%  { background-position:  50% 50%; }
-      75%  { background-position:  75% 50%; }
-      100% { background-position:   0% 50%; }
-    }
-
-    .indice-ventana{
-      margin:18px auto 10px;
-      max-width:920px;
-      background:var(--card);
-      border-radius:var(--card-radius);
-      padding:14px;
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    .indice-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
+    /* INDEX PANEL */
+    .indice-ventana{ margin:18px auto 10px; max-width:920px; background:var(--card); border-radius:var(--card-radius); padding:14px; box-shadow: var(--shadow); overflow:hidden; }
+    .indice-header{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
     .indice-titulo{ font-weight:800; font-size:1.02rem; color:var(--muted) }
 
-    /* close button for the index (below the title) */
-    .btn-close {
-      display:inline-block;
-      margin-top:10px;
-      padding:8px 12px;
-      border-radius:8px;
-      background:transparent;
-      color:var(--muted);
-      border:1px solid rgba(16,24,40,0.06);
-      cursor:pointer;
-      font-weight:700;
-    }
-    .btn-close:focus { outline: 3px solid rgba(11,122,255,0.14); }
+    .btn-close { display:inline-block; margin-top:10px; padding:8px 12px; border-radius:8px; background:transparent; color:var(--muted); border:1px solid rgba(16,24,40,0.06); cursor:pointer; font-weight:700; }
+    .btn-close:focus { outline:3px solid rgba(11,122,255,0.14); }
 
-    /* Grid of blocks */
-    .indice-grid{
-      margin-top:12px;
-      display:grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap:12px;
-      max-height:480px;
-      overflow:auto;
-      padding-right:6px;
-    }
-    .bloque {
-      background: linear-gradient(180deg,#ffffff,#fbfbfd);
-      border-radius:10px;
-      padding:12px 12px;
-      border:1px solid rgba(16,24,40,0.04);
-      box-shadow: 0 6px 18px rgba(13,20,30,0.03);
-      transition: transform .14s ease, box-shadow .14s ease, border-color .18s ease;
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-    .bloque:focus-within, .bloque:hover{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(16,24,40,0.06); border-color: rgba(11,122,255,0.12); }
+    .indice-grid{ margin-top:12px; display:grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap:12px; max-height:480px; overflow:auto; padding-right:6px; }
+    .bloque { background: linear-gradient(180deg,#ffffff,#fbfbfd); border-radius:10px; padding:12px; border:1px solid rgba(16,24,40,0.04); box-shadow: 0 6px 18px rgba(13,20,30,0.03); transition: transform .14s, box-shadow .14s, border-color .18s; display:flex; align-items:center; gap:12px; }
+    .bloque:hover, .bloque:focus-within{ transform:translateY(-6px); box-shadow:0 20px 40px rgba(16,24,40,0.06); border-color: rgba(11,122,255,0.12); }
 
-    .bloque .accent {
-      width:6px;
-      height:44px;
-      border-radius:6px;
-      flex:0 0 6px;
-    }
+    .bloque .accent { width:6px; height:44px; border-radius:6px; flex:0 0 6px; }
     .accent-blue{ background: linear-gradient(180deg,var(--accent1), #2a9bff); }
     .accent-green{ background: linear-gradient(180deg,var(--accent2), #44e07a); }
     .accent-yellow{ background: linear-gradient(180deg,var(--accent3), #ffe079); }
     .accent-red{ background: linear-gradient(180deg,var(--accent4), #ff7a7a); }
 
-    .bloque a{
-      color:var(--text);
-      font-weight:700;
-      text-decoration:none;
-      display:block;
-      font-size:0.985rem;
-      line-height:1.22;
-      letter-spacing:0.2px;
-    }
-    .bloque a small{
-      display:block;
-      margin-top:4px;
-      color:var(--muted);
-      font-weight:600;
-      font-size:0.81rem;
-    }
+    .bloque a{ color:var(--text); font-weight:700; text-decoration:none; display:block; font-size:0.985rem; line-height:1.22; letter-spacing:0.2px; }
+    .bloque a small{ display:block; margin-top:4px; color:var(--muted); font-weight:600; font-size:0.81rem; }
 
-    .bloque a:focus{
-      outline: none;
-      text-decoration:underline;
-      text-underline-offset:4px;
-    }
-
-    .seccion{
-      background:var(--card);
-      border-radius:var(--card-radius);
-      padding:22px;
-      margin:18px 0;
-      box-shadow: var(--shadow);
-      position:relative;
-      overflow:visible;
-    }
-
-    header, footer { color: #ffffff; }
-    footer{
-      margin-top:36px;
-      background:#0b1220;
-      color:#ffffff;
-      padding:22px 18px;
-      text-align:center;
-      border-top:6px solid rgba(11,122,255,0.08);
-      position:relative;
-      overflow:visible;
-    }
-    footer .redes a{
-      display:inline-block;
-      margin:6px 12px;
-      color:#ffffff;
-      text-decoration:none;
-      font-weight:600;
-    }
+    .seccion{ background:var(--card); border-radius:var(--card-radius); padding:22px; margin:18px 0; box-shadow: var(--shadow); position:relative; overflow:visible; }
 
     main h2 { margin-top:0; color:var(--text); font-size:1.25rem; }
     main p { color:var(--text); line-height:1.7; margin:0.6rem 0; }
-    main .muted { color:var(--muted); }
+    main .muted { color:var(--muted); font-size:0.95rem; }
+
+    footer{ margin-top:36px; background:#0b1220; color:#ffffff; padding:22px 18px; text-align:center; border-top:6px solid rgba(11,122,255,0.08); position:relative; overflow:visible; }
+    footer .redes a{ display:inline-block; margin:6px 12px; color:#ffffff; text-decoration:none; font-weight:600; }
 
     .downloads{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:10px }
     .downloads a{ display:inline-block; padding:10px 14px; background:#0b1220; color:#fff; border-radius:10px; text-decoration:none; font-weight:700; }
-    .downloads .secondary{
-      background:transparent;
-      color:var(--muted);
-      border:1px dashed rgba(16,24,40,0.06);
-      padding:8px 12px;
-      font-weight:700;
+    .downloads .secondary{ background:transparent; color:var(--muted); border:1px dashed rgba(16,24,40,0.06); padding:8px 12px; font-weight:700; }
+
+    /* CONTENT ORNAMENTS (now inline between sections) */
+    .content-adorno {
+      display:block;
+      width:var(--content-adorno-max);
+      max-width:520px;
+      margin: 18px 24px;
+      border-radius:12px;
+      box-shadow: 0 14px 40px rgba(16,24,40,0.06);
+      overflow:hidden;
+      background: #ffffff;
+      opacity:0;
+      transform: translateY(14px) scale(.995);
+      transition: opacity .68s cubic-bezier(.2,.9,.2,1), transform .68s cubic-bezier(.2,.9,.2,1);
+    }
+    .content-adorno img{ display:block; width:100%; height:auto; object-fit:cover; }
+    .content-adorno figcaption{ padding:10px 12px; color:var(--muted); font-weight:600; font-size:0.92rem; }
+
+    /* left / right floats for immersive browsing */
+    .adorno-left { float:left; shape-outside: inset(0 0 0 0); margin-right:18px; }
+    .adorno-right { float:right; shape-outside: inset(0 0 0 0); margin-left:18px; }
+
+    /* when visible */
+    .content-adorno.visible { opacity:1; transform: none; }
+
+    /* hover micro-interaction */
+    .content-adorno:hover{ transform: translateY(-6px) scale(1.01); box-shadow: 0 26px 60px rgba(16,24,40,0.12); transition: transform .28s, box-shadow .28s; }
+
+    /* responsive adjustments */
+    @media (max-width: 920px){
+      :root { --content-adorno-max:72%; }
+      .content-adorno { margin: 18px auto; float:none; }
+      .adorno-left, .adorno-right { float:none; margin: 18px auto; }
+    }
+    @media (max-width: 520px){
+      :root { --content-adorno-max:100%; }
+      main { padding:18px 12px 70px; }
     }
 
-    /* small tweaks for ornament layering */
-    .legendario-container::before{
-      content:"";
-      position:absolute;
-      right:4%;
-      top:-6%;
-      width:36%;
-      height:160%;
-      background-image: url("adorno/PLC2.jpg"); /* large subtle PLC device behind the central button */
-      background-size:contain;
-      background-repeat:no-repeat;
-      background-position:center;
-      opacity:0.06;
-      pointer-events:none;
-      z-index:0;
-      transform:translateY(-6%);
-    }
-
-    @media (max-width:720px){
-      header{ height:220px }
-      #uan{ width:120px }
-      .btn-legendario{ width:100%; padding:14px 18px }
-      .indice-grid{ grid-template-columns: repeat(1,1fr) }
-      .adorno.bg-right { display:none; } /* hide large bg on small screens */
-      .adorno.small { width:66px; }
-      .legendario-container::before { display:none; }
+    /* reduced motion handling - make ornaments visible without animation */
+    @media (prefers-reduced-motion: reduce){
+      .content-adorno, .btn-legendario .ring, .btn-legendario .btnText { transition: none !important; animation: none !important; transform: none !important; opacity:1 !important; }
     }
   </style>
 </head>
 <body>
-
-  <!-- Decorative floating ornaments from folder "adorno" -->
-  <!-- Mapping of images you provided:
-       adorno/PLC.gif  -> ilustración tipo monitor (se colocará top-left)
-       adorno/PLC1.jpg -> logito color (se usa near title & top-right)
-       adorno/PLC2.jpg -> gran PLC device (se usa como fondo suave junto al botón)
-       adorno/PLC.webp -> máquina/conveyor (se usará en footer / bottom-left)
-  -->
-  <img src="adorno/PLC.gif" class="adorno top-left small float-medium" alt="" aria-hidden="true" />
-  <img src="adorno/PLC1.jpg" class="adorno top-right small float-slow" alt="" aria-hidden="true" />
-  <img src="adorno/PLC2.jpg" class="adorno bg-right large" alt="" aria-hidden="true" />
-  <img src="adorno/PLC.webp" class="adorno bottom-left mid float-fast" alt="" aria-hidden="true" />
 
   <!-- HEADER -->
   <header id="mainHeader" role="banner">
@@ -378,25 +175,20 @@
     <div class="cabecera-texto" role="heading" aria-level="1">
       <h1>
         <span>Proyecto PLC – ICC 2025</span>
-        <!-- small badge (decorative) using adorno/PLC1.jpg -->
         <img src="adorno/PLC1.jpg" alt="" aria-hidden="true" style="width:44px; height:auto; margin-left:8px; filter: drop-shadow(0 4px 18px rgba(0,0,0,.35));" />
       </h1>
-      <p>Autores: Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez — Ingeniería en Control y computación | Universidad Autónoma de Nayarit</p>
+      <p>Autores: Carlos Adonaí Talamantes González &amp; Miguel Muro Rodríguez — Ingeniería en Control y Computación | Universidad Autónoma de Nayarit</p>
     </div>
   </header>
 
   <main>
     <div class="legendario-container" aria-hidden="false">
       <button id="toggleBtn" class="btn-legendario" aria-expanded="false" aria-controls="indiceVentana" title="Mostrar índice de bloques">
-        <!-- rings (snake-like animated arcs) -->
         <span class="ring r1" aria-hidden="true"></span>
         <span class="ring r2" aria-hidden="true"></span>
         <span class="ring r3" aria-hidden="true"></span>
         <span class="ring r4" aria-hidden="true"></span>
-
-        <span class="inner">
-          <span class="btnText">PROYECTO 38 BLOQUES</span>
-        </span>
+        <span class="inner"><span class="btnText">PROYECTO 38 BLOQUES</span></span>
       </button>
     </div>
 
@@ -406,31 +198,56 @@
         <div style="color:var(--muted); font-size:0.95rem">Selecciona un bloque para ver su página</div>
       </div>
 
-      <!-- Botón para cerrar el índice (solamente cierra la pestaña del índice) -->
       <button id="closeIndexBtn" class="btn-close" style="display:none" aria-hidden="true">Cerrar índice</button>
-
       <div id="indiceGrid" class="indice-grid" role="list"></div>
     </div>
 
     <section class="seccion" aria-labelledby="intro-title">
       <h2 id="intro-title">Introducción</h2>
       <p>Un PLC (Controlador Lógico Programable) es un dispositivo electrónico diseñado para automatizar procesos industriales mediante la supervisión de señales de entrada y el control de salidas. LOGO!Soft Comfort, desarrollado por Siemens, es una herramienta de programación que permite simular, crear y verificar proyectos de control de manera visual e intuitiva. En esta página verás explicaciones técnicas, ejemplos prácticos y recursos descargables para aprender a diseñar, programar y verificar sistemas de control usando bloques especiales del PLC LOGO!.</p>
+
+      <!-- Ornamento entre contenido: ilustración de interfaz -->
+      <figure class="content-adorno adorno-left" tabindex="0">
+        <img src="adorno/PLC.gif" alt="Ilustración: interfaz de software de PLC y diagramas técnicos" />
+        <figcaption class="muted">Interfaz y nodos del PLC — ayuda visual para el aprendizaje</figcaption>
+      </figure>
+
       <p>Los bloques especiales son funciones predefinidas con entrada/salida y parámetros que facilitan la creación de estructuras complejas sin programar desde cero. Entre los temas que cubre este proyecto están temporizadores, contadores, bloques analógicos, generadores y herramientas para supervisión y comunicación.</p>
     </section>
 
     <section class="seccion" aria-labelledby="objetivo-title">
       <h2 id="objetivo-title">Objetivo del proyecto</h2>
       <p>Brindar una guía didáctica sobre el uso de LOGO!Soft Comfort, con especial énfasis en los bloques especiales del PLC Siemens LOGO!. El proyecto combina teoría, visuales y ejemplos prácticos para estudiantes de Ingeniería y Automatización, permitiendo practicar programación y simulación antes de la implementación física.</p>
+
+      <!-- Ornamento: logo color como badge entre secciones -->
+      <figure class="content-adorno adorno-right" tabindex="0">
+        <img src="adorno/PLC1.jpg" alt="Logotipo color del proyecto PLC" />
+        <figcaption class="muted">Identidad del proyecto</figcaption>
+      </figure>
+
+      <p>Se propone una experiencia de aprendizaje guiada, con material descargable y ejemplos paso a paso para construir proyectos reales.</p>
     </section>
 
     <section class="seccion" aria-labelledby="remanencia-title">
       <h2 id="remanencia-title">Remanencia</h2>
       <p>La remanencia es la capacidad del PLC para conservar ciertos valores o estados en memoria incluso después de una interrupción de energía. Esto permite continuar con las mismas condiciones tras restablecer la alimentación, esencial para contadores, temporizadores y banderas de control que no deben reiniciarse automáticamente.</p>
+
+      <!-- Ornamento grande: PLC device (centro) -->
+      <figure class="content-adorno" style="--content-adorno-max:78%;" tabindex="0">
+        <img src="adorno/PLC2.jpg" alt="Dispositivo PLC ilustrado con conexiones y terminales" />
+        <figcaption class="muted">Ejemplo de hardware PLC — entradas, salidas y terminales</figcaption>
+      </figure>
     </section>
 
     <section class="seccion" aria-labelledby="proteccion-title">
       <h2 id="proteccion-title">Protección activa</h2>
       <p>Incluye dispositivos y medidas que protegen el sistema y al operario ante fallas: fusibles, disyuntores, relés térmicos, contactores y toma de tierra. La protección busca interrumpir energía ante fallos, evitando daños a PLC y actuadores.</p>
+
+      <!-- Ornamento: máquina/conveyor como ilustración contextual -->
+      <figure class="content-adorno adorno-left" tabindex="0">
+        <img src="adorno/PLC.webp" alt="Máquina con cinta transportadora y control por PLC" />
+        <figcaption class="muted">Proceso industrial controlado por PLC</figcaption>
+      </figure>
     </section>
 
     <section class="seccion" aria-labelledby="conexion-title">
@@ -458,57 +275,25 @@
         <a href="https://www.facebook.com/share/14NZuwbbVwg/" target="_blank" rel="noopener noreferrer">Facebook de Carlos</a>
         <a href="https://www.facebook.com/share/1EZ4xDHeC3/" target="_blank" rel="noopener noreferrer">Facebook de Miguel</a>
       </div>
-      <!-- small decorative version of the machine on footer (low opacity) -->
-      <img src="adorno/PLC.webp" alt="" aria-hidden="true" style="position:absolute; right:6px; bottom:-28px; width:220px; opacity:0.12; pointer-events:none;" />
     </div>
   </footer>
 
   <script>
-    // Show header transition
+    // Header entrance
     window.addEventListener('load', () => {
       document.getElementById('mainHeader').classList.add('loaded');
     });
 
-    // Block names provided by user
+    // Bloques (nombres)
     const nombres = [
-      "Retardo en la conexión",
-      "Retardo a la desconexión",
-      "Retardo conexión/desconexión",
-      "Retardo a la conexión con memoria",
-      "Relé de barrido (Salida de impulsos)",
-      "Relé de barrido disparado por flancos",
-      "Generador de impulsos asíncronos",
-      "Generador aleatorio",
-      "Interruptor de alumbrado para escalera",
-      "Interruptor bifuncional",
-      "Temporizador semanal",
-      "Temporizador anual",
-      "Reloj astronómico",
-      "Cronómetro",
-      "Contador adelante/atrás",
-      "Contador de horas de funcionamiento",
-      "Selector de umbral",
-      "Instrucción aritmética",
-      "Comparador analógico",
-      "Conmutador analógico de valor de umbral",
-      "Amplificador analógico",
-      "Vigilancia del valor analógico",
-      "Conmutador analógico de valor umbral diferencial",
-      "MUX analógico",
-      "Rampa analógica",
-      "Regulador PI",
-      "PWM",
-      "Filtro analógico",
-      "Max/Min",
-      "Valor medido",
-      "Relé autoenclavador",
-      "Relé de impulsos",
-      "Texto de aviso",
-      "Interruptor de software",
-      "Registro de desplazamiento",
-      "Detección de error de la instrucción aritmética",
-      "Convertidor flotante/entero",
-      "Convertidor entero/flotante"
+      "Retardo en la conexión","Retardo a la desconexión","Retardo conexión/desconexión","Retardo a la conexión con memoria",
+      "Relé de barrido (Salida de impulsos)","Relé de barrido disparado por flancos","Generador de impulsos asíncronos","Generador aleatorio",
+      "Interruptor de alumbrado para escalera","Interruptor bifuncional","Temporizador semanal","Temporizador anual","Reloj astronómico",
+      "Cronómetro","Contador adelante/atrás","Contador de horas de funcionamiento","Selector de umbral","Instrucción aritmética",
+      "Comparador analógico","Conmutador analógico de valor de umbral","Amplificador analógico","Vigilancia del valor analógico",
+      "Conmutador analógico de valor umbral diferencial","MUX analógico","Rampa analógica","Regulador PI","PWM","Filtro analógico",
+      "Max/Min","Valor medido","Relé autoenclavador","Relé de impulsos","Texto de aviso","Interruptor de software","Registro de desplazamiento",
+      "Detección de error de la instrucción aritmética","Convertidor flotante/entero","Convertidor entero/flotante"
     ];
 
     const accents = ['accent-blue','accent-green','accent-yellow','accent-red'];
@@ -550,7 +335,7 @@
     }
     generarGrid();
 
-    // Toggle index panel
+    // Toggle index panel behavior (open / close) with explicit "Cerrar índice" button
     const btn = document.getElementById('toggleBtn');
     const ventana = document.getElementById('indiceVentana');
     const closeBtn = document.getElementById('closeIndexBtn');
@@ -560,16 +345,13 @@
       ventana.style.animation = 'fadeInSlide .36s cubic-bezier(.2,.9,.2,1) forwards';
       ventana.setAttribute('aria-hidden','false');
       btn.setAttribute('aria-expanded','true');
-      // show the explicit close button inside the panel
       closeBtn.style.display = 'inline-block';
       closeBtn.setAttribute('aria-hidden','false');
-      // focus first link after animation
       setTimeout(() => {
         const firstLink = ventana.querySelector('.bloque a');
         if(firstLink) firstLink.focus();
       }, 380);
     }
-
     function closeIndex(returnFocus=true) {
       ventana.style.animation = 'fadeOut .28s ease forwards';
       setTimeout(()=> {
@@ -584,57 +366,64 @@
 
     btn.addEventListener('click', () => {
       const isVisible = ventana.style.display === 'block';
-      if(isVisible){
-        closeIndex();
-      } else {
-        openIndex();
-      }
+      if(isVisible) closeIndex(); else openIndex();
     });
+    closeBtn.addEventListener('click', () => closeIndex());
 
-    // "Cerrar índice" button only closes the index panel (as requested)
-    closeBtn.addEventListener('click', () => {
-      closeIndex();
-    });
-
-    // keyboard support for links
+    // Keyboard support inside grid and ESC to close panel
     grid.addEventListener('keydown', (e) => {
       const t = e.target;
       if((e.key === 'Enter' || e.key === ' ') && t && t.tagName === 'A'){
         e.preventDefault();
         window.location = t.href;
       }
-      // Support Escape to close the index when focus inside
       if(e.key === 'Escape'){
-        // close only the index panel
-        if(ventana.style.display === 'block'){
-          closeIndex();
-        }
+        if(ventana.style.display === 'block') closeIndex();
       }
     });
 
-    // Accessibility: hide animations for reduced motion users
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (reduce && reduce.matches) {
-      document.querySelectorAll('.btn-legendario .ring').forEach(r => r.style.animation = 'none');
-      document.querySelector('.btn-legendario .btnText').style.animation = 'none';
-      document.querySelectorAll('.float-slow, .float-medium, .float-fast').forEach(el => el.style.animation = 'none');
-    }
+    // IntersectionObserver to reveal content ornaments as user scrolls
+    (function handleContentOrnaments(){
+      const ornaments = Array.from(document.querySelectorAll('.content-adorno'));
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Small animation keyframes injected
+      if(prefersReduced){
+        // Make them visible immediately (no animation)
+        ornaments.forEach(el => el.classList.add('visible'));
+        return;
+      }
+
+      if('IntersectionObserver' in window){
+        const io = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+            if(entry.isIntersecting){
+              entry.target.classList.add('visible');
+              // once visible, unobserve to avoid repeated triggers
+              obs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.18 });
+
+        ornaments.forEach(el => io.observe(el));
+      } else {
+        // fallback: reveal all
+        ornaments.forEach(el => el.classList.add('visible'));
+      }
+    })();
+
+    // Preload decorative images to avoid layout jumps
+    (function preload(){
+      const imgs = ["adorno/PLC.gif","adorno/PLC1.jpg","adorno/PLC2.jpg","adorno/PLC.webp"];
+      imgs.forEach(src => { const i = new Image(); i.src = src; });
+    })();
+
+    // animation keyframes injection (index panel)
     (function(){
       const s = document.createElement('style'); document.head.appendChild(s);
       s.sheet.insertRule('@keyframes fadeInSlide { from { opacity:0; transform: translateY(-8px) scale(.995) } to { opacity:1; transform: translateY(0) scale(1) } }',0);
       s.sheet.insertRule('@keyframes fadeOut { from { opacity:1; transform: translateY(0) } to { opacity:0; transform: translateY(-6px) } }',1);
     })();
 
-    // Preload decorative images to avoid layout jumps
-    (function preload(){
-      const imgs = ["adorno/PLC.gif","adorno/PLC1.jpg","adorno/PLC2.jpg","adorno/PLC.webp"];
-      imgs.forEach(src => {
-        const i = new Image();
-        i.src = src;
-      });
-    })();
   </script>
 </body>
 </html>
